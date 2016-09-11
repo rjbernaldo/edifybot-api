@@ -2,7 +2,11 @@ class BotController < ApplicationController
   before_filter :authorized_scope, :only => [:receive_data]
 
   def verify_token
-    puts 'verify_token'
+    if params['hub.verify_token'] == 'correct_token'
+      render json: {}, status: 200
+    else
+      render json: {}, status: 404
+    end
   end
 
   def receive_data
@@ -23,5 +27,6 @@ class BotController < ApplicationController
     #     facebook_id: sender_id
     #   )
     # end
+    #
   end
 end
