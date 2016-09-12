@@ -10,23 +10,24 @@ class BotController < ApplicationController
   end
 
   def receive_data
-    puts 'receive_data'
+    render json: {}, status: 200
+  end
+
+  def decode_data body
   end
 
   private
 
   def authorized_scope
-    sender_id = params[:sender_id]
+    user = User.where('sender_id = ?', params[:sender_id]).take
 
-    puts 'authorized_scope'
+    unless user
+      user = User.create(
+        sender_id: params[:sender_id],
+        name: params[:name]
+      )
+    end
 
-    # @user = User.where('facebook_id = ?', sender_id).take
-
-    # unless @user
-    #   @user = User.create(
-    #     facebook_id: sender_id
-    #   )
-    # end
-    #
+    @user = user
   end
 end

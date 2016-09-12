@@ -34,5 +34,23 @@ RSpec.describe BotController do
   end
 
   describe 'POST#receive_data' do
+    context 'when user sends a message' do
+      it 'should create a new user' do
+        body = {
+          sender_id: '123',
+          name: '123',
+          format: :json
+        }
+
+        post :receive_data, body
+
+        expect(response.status).to eq(200)
+
+        last_user = User.last
+
+        expect(last_user.name).to eq('123')
+        expect(last_user.sender_id).to eq('123')
+      end
+    end
   end
 end
