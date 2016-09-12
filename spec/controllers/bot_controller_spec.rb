@@ -34,14 +34,12 @@ RSpec.describe BotController do
   end
 
   describe 'POST#receive_data' do
+    let(:body) {
+      # TODO: Facebook sample json
+    }
+    
     context 'when user sends a message' do
       it 'should create a new user' do
-        body = {
-          sender_id: '123',
-          name: '123',
-          format: :json
-        }
-
         post :receive_data, body
 
         expect(response.status).to eq(200)
