@@ -42,5 +42,20 @@ class BotController < ApplicationController
   #end
 
   def send_to_facebook(sender_id, message_response)
+    headers = { 'Content-Type' => 'application/json' }
+    body = {
+      recipient: {
+        id: sender_id
+      },
+      message: {
+        text: message_response
+      }
+    }.to_json
+
+    HTTParty.post(
+      "#{FACEBOOK_GRAPH_URL}/v2.6/me/messages?access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}",
+      headers: headers,
+      body: body
+    )
   end
 end

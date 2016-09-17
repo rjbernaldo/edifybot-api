@@ -39,4 +39,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  GREETING_MESSAGES = ['hi', 'hello']
+  HELP_MESSAGES = ['help']
+  REPORTS_MESSAGES = ['reports']
+  RESET_LOCATION_MESSAGES = ['reset location']
+  FACEBOOK_GRAPH_URL = 'https://graph.facebook.com'
+  FACEBOOK_PAGE_ACCESS_TOKEN = 'EAAINb8zUjRgBAJo2qR1IHB94ZBPF5LSxGUy28HMt0O3b2vKNC2L0VQMrxAq5sAoZCCe8iaEv76jTsbwJBacavjuJetTCSNXC0fxALk3khZB09DQwJXP08c7ZAyZAk9KpxDZAjl42np4i5b0xavJBV1ZBzLggY97MybbD2SJ57tjGwZDZD'
 end
