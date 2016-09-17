@@ -32,15 +32,10 @@ class BotController < ApplicationController
           )
         end
 
-        #unless user.name do
-        #  sender_details = retrieve_sender_details(sender_id)
-
-        #  user.update_attributes(sender_details)
-        #  user.save
-        #end
-
-        message_response = user.process_message(message_body)
-        send_to_facebook(sender_id, message_response)
+        if message_body
+          message_response = user.process_message(message_body)
+          send_to_facebook(sender_id, message_response)
+        end
       end
     end
   end
