@@ -1,33 +1,46 @@
 class BotController < ApplicationController
-  before_filter :authorized_scope, :only => [:receive_data]
-
   def verify_token
     if params['hub.verify_token'] == 'correct_token'
-      render json: {}, status: 200
+      render text: params['hub.challenge'], status: 200
     else
-      render json: {}, status: 404
+      render text: 'NOT FOUND', status: 404
     end
   end
 
   def receive_data
-    render json: {}, status: 200
+    render text: 'OK', status: 200
+
+    entries = decode_data(params)
+    entries.each do |entry|
+      messages = entry['messaging']
+      messages.each do |message|
+        sender_id = message['sender']['id']
+        message_body = message['message']
+
+        user = User.where('sender_id = ?', sender_id).take || User.create(sender_id: sender_id)
+
+        #unless user.name do
+        #  sender_details = retrieve_sender_details(sender_id)
+
+        #  user.update_attributes(sender_details)
+        #  user.save
+        #end
+
+        message_response = user.process_message(message_body)
+        send_to_facebook(sender_id, message_response)
+      end
+    end
   end
 
   def decode_data body
+    if body['bot']
+      return body['bot']['entry']
+    end
   end
 
-  private
+  #def retrieve_sender_details(sender_id)
+  #end
 
-  def authorized_scope
-    user = User.where('sender_id = ?', params[:sender_id]).take
-
-    unless user
-      user = User.create(
-        sender_id: params[:sender_id],
-        name: params[:name]
-      )
-    end
-
-    @user = user
+  def send_to_facebook(sender_id, message_response)
   end
 end

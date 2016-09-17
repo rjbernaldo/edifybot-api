@@ -6,7 +6,7 @@ RSpec.describe BotController do
       it 'should return 200' do
         params = {
           'hub.mode' => '',
-          'hub.challenge' => '',
+          'hub.challenge' => 'challenge',
           'hub.verify_token' => 'correct_token',
           format: :json
         }
@@ -14,6 +14,7 @@ RSpec.describe BotController do
         get :verify_token, params
 
         expect(response.status).to eq(200)
+        expect(response.body).to eq('challenge')
       end
     end
 
@@ -21,7 +22,7 @@ RSpec.describe BotController do
       it 'should return 404 do' do
         params = {
           'hub.mode' => '',
-          'hub.challenge' => '',
+          'hub.challenge' => 'challenge',
           'hub.verify_token' => 'incorrect_token',
           format: :json
         }
@@ -29,15 +30,65 @@ RSpec.describe BotController do
         get :verify_token, params
 
         expect(response.status).to eq(404)
+        expect(response.body).to eq('NOT FOUND')
       end
     end
   end
 
   describe 'POST#receive_data' do
     let(:body) {
-      # TODO: Facebook sample json
+      {
+        "object"=>"page",
+        "entry"=>[
+          {
+            "id"=>"1802378443326126",
+            "time"=>1474075416133,
+            "messaging"=>[
+              {
+                "sender"=>{
+                  "id"=>"950498005077644"
+                },
+                "recipient"=>{
+                  "id"=>"1802378443326126"
+                },
+                "timestamp"=>1474075304229,
+                "message"=>{
+                  "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
+                  "seq"=>2296,
+                  "text"=>"test"
+                }
+              }
+            ]
+          }
+        ],
+        "bot"=>{
+          "object"=>"page",
+          "entry"=>[
+            {
+              "id"=>"1802378443326126",
+              "time"=>1474075416133,
+              "messaging"=>[
+                {
+                  "sender"=>{
+                    "id"=>"950498005077644"
+                  },
+                  "recipient"=>{
+                    "id"=>"1802378443326126"
+                  },
+                  "timestamp"=>1474075304229,
+                  "message"=>{
+                    "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
+                    "seq"=>2296,
+                    "text"=>"test"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
-    
+
     context 'when user sends a message' do
       it 'should create a new user' do
         post :receive_data, body
@@ -46,8 +97,7 @@ RSpec.describe BotController do
 
         last_user = User.last
 
-        expect(last_user.name).to eq('123')
-        expect(last_user.sender_id).to eq('123')
+        expect(last_user.sender_id).to eq('950498005077644')
       end
     end
   end
