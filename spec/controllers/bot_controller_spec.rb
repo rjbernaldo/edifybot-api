@@ -90,6 +90,21 @@ RSpec.describe BotController do
     }
 
     context 'when user sends a message' do
+      before do
+        stub_request(:post, "#{FACEBOOK_GRAPH_URL}/v2.6/me/messages?access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
+          .to_return(body: 'OK')
+
+        stub_request(:get, "#{FACEBOOK_GRAPH_URL}/v2.6/950498005077644?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
+          .to_return(body: {
+            first_name: 'test_firstname',
+            last_name: 'test_lastname',
+            profile_pic: 'profilepic.com',
+            locale: '100',
+            timezone: '100',
+            gender: 'male'
+          }.to_json)
+      end
+      
       it 'should create a new user' do
         post :receive_data, body
 
@@ -98,6 +113,12 @@ RSpec.describe BotController do
         last_user = User.last
 
         expect(last_user.sender_id).to eq('950498005077644')
+        expect(last_user.first_name).to eq('test_firstname')
+        expect(last_user.last_name).to eq('test_lastname')
+        expect(last_user.profile_pic).to eq('profilepic.com')
+        expect(last_user.locale).to eq('100')
+        expect(last_user.timezone).to eq('100')
+        expect(last_user.gender).to eq('male')
       end
     end
   end

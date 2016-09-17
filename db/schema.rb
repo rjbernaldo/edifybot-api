@@ -21,9 +21,14 @@ ActiveRecord::Schema.define(version: 20160911004720) do
 
   create_table "users", force: :cascade do |t|
     t.string   "sender_id"
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "profile_pic"
+    t.string   "locale"
+    t.string   "timezone"
+    t.string   "gender"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end

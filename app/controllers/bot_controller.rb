@@ -17,7 +17,20 @@ class BotController < ApplicationController
         sender_id = message['sender']['id']
         message_body = message['message']
 
-        user = User.where('sender_id = ?', sender_id).take || User.create(sender_id: sender_id)
+        user = User.where('sender_id = ?', sender_id).take
+
+        unless user
+          body = JSON.parse(retrieve_sender_details(sender_id).body)
+          user = User.create(
+            sender_id: sender_id,
+            first_name: body['first_name'],
+            last_name: body['last_name'],
+            profile_pic: body['profile_pic'],
+            locale: body['locale'],
+            timezone: body['timezone'],
+            gender: body['gender']
+          )
+        end
 
         #unless user.name do
         #  sender_details = retrieve_sender_details(sender_id)
@@ -38,8 +51,11 @@ class BotController < ApplicationController
     end
   end
 
-  #def retrieve_sender_details(sender_id)
-  #end
+  def retrieve_sender_details(sender_id)
+    HTTParty.get(
+      "#{FACEBOOK_GRAPH_URL}/v2.6/#{sender_id}?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}",
+    )
+  end
 
   def send_to_facebook(sender_id, message_response)
     headers = { 'Content-Type' => 'application/json' }
