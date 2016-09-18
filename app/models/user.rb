@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
   def process_message(message)
     message_action = determine_action(message)
-    decoded_message = decode_message(message)
-    message_response = process_action(message_action, decoded_message)
+    message_response = process_action(message_action, message)
 
     return message_response
   end
@@ -25,12 +24,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def process_action(message_action, decoded_message = nil)
+  def process_action(message_action, message = nil)
     case message_action
       when 'NEW_EXPENSE'
-        if decoded_message.nil?
-          return "I'm sorry, what was that?"
-        end
+        formatted_expense = format_expense(message)
+
+        new_expense = Expense.create(formatted_expense)
       when 'GREETING'
         return 'Hi there.'
       when 'UNRECOGNIZED'
@@ -38,7 +37,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def decode_message(message)
+  def format_expense(message)
     return {
       amount: parse_amount(message),
       item: parse_item(message),

@@ -15,6 +15,10 @@ ActiveRecord::Schema.define(version: 20160911004720) do
 
   create_table "expenses", force: :cascade do |t|
     t.integer  "user_id"
+    t.string   "amount"
+    t.string   "item"
+    t.string   "location"
+    t.string   "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -92,13 +92,13 @@ RSpec.describe User do
     end
   end
 
-  describe '#decode_message' do
-    context 'when message is a completely formatted expense' do
-      it 'should return a decoded message' do
+  describe '#format_expense' do
+    context 'when message is valid' do
+      it 'should return a formatted expense' do
         message = message_wrapper.dup
         message['text'] = '20 ramen @mensho #food'
 
-        decoded_message = user.decode_message(message)
+        decoded_message = user.format_expense(message)
         expect(decoded_message[:amount]).to eq('20')
         expect(decoded_message[:item]).to eq('ramen')
         expect(decoded_message[:location]).to eq('mensho')
@@ -107,11 +107,11 @@ RSpec.describe User do
     end
 
     context 'when message has spaces' do
-      it 'should still return a decoded message' do
+      it 'should return a formatted expense' do
         message = message_wrapper.dup
         message['text'] = '20 shoyu ramen @ramen underground #comfort food'
 
-        decoded_message = user.decode_message(message)
+        decoded_message = user.format_expense(message)
         expect(decoded_message[:amount]).to eq('20')
         expect(decoded_message[:item]).to eq('shoyu ramen')
         expect(decoded_message[:location]).to eq('ramen underground')
@@ -120,11 +120,11 @@ RSpec.describe User do
     end
 
     context 'when order is swapped' do
-      it 'should return a decoded message' do
+      it 'should return a formatted expense' do
         message = message_wrapper.dup
         message['text'] = '20 ramen #food @mensho'
 
-        decoded_message = user.decode_message(message)
+        decoded_message = user.format_expense(message)
         expect(decoded_message[:amount]).to eq('20')
         expect(decoded_message[:item]).to eq('ramen')
         expect(decoded_message[:location]).to eq('mensho')
