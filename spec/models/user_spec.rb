@@ -10,7 +10,7 @@ RSpec.describe User do
     }
   }
 
-  describe '#decode_message' do
+  describe '#determine_action' do
     describe 'GREETING' do
       context 'when message is "hi"' do
         it 'should respond with "GREETING"' do
@@ -137,15 +137,21 @@ RSpec.describe User do
     context 'when action is "GREETING"' do
       it 'should respond with a greeting' do
         message_response = user.process_action('GREETING', nil)
-        expect(message_response).to eq('Hi there.')
+        expect(message_response[:data][:text]).to eq('Hi there.')
       end
     end
 
     context 'when action is "UNRECOGNIZED"' do
       it 'should respond appropriately' do
         message_response = user.process_action('UNRECOGNIZED', nil)
-        expect(message_response).to eq("I'm sorry, what was that?")
+        expect(message_response[:data][:text]).to eq("I'm sorry, what was that?")
       end
+    end
+  end
+
+  describe '#process_postback_action' do
+    context 'when action is "NEW_EXPENSE_YES"' do
+      
     end
   end
 end

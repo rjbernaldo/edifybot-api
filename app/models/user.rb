@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
     return message_response
   end
 
+  def process_postback(postback)
+    postback_response = process_postback_action(postback)
+  end
+
   def determine_action(message)
     message_text = message['text']
 
@@ -26,15 +30,61 @@ class User < ActiveRecord::Base
 
   def process_action(message_action, message = nil)
     case message_action
-      when 'NEW_EXPENSE'
-        formatted_expense = format_expense(message)
-
-        new_expense = Expense.create(formatted_expense)
       when 'GREETING'
-        return 'Hi there.'
+        return {
+          type: 'message',
+          data: {
+            text: 'Hi there.'
+          }
+        }
       when 'UNRECOGNIZED'
-        return "I'm sorry, what was that?"
+        return {
+          type: 'message',
+          data: {
+            text: "I'm sorry, what was that?"
+          }
+        }
+      when 'NEW_EXPENSE'
+        self.state_data = format_expense(message).to_json
+
+        return {
+          type: 'button',
+          data: {
+            text: 'Correct?',
+            buttons: [
+              {
+                type: 'postback',
+                title: 'Yes',
+                payload: 'NEW_EXPENSE_YES'
+              },
+              {
+                type: 'postback',
+                title: 'No',
+                payload: 'NEW_EXPENSE_NO'
+              }
+            ]
+          }
+        }
     end
+  end
+
+  def process_postback_action(postback)
+    if self.state == 'NEW_EXPENSE_CONFIRM'
+      case postback['payload']
+        when 'NEW_EXPENSE_YES'
+          self.expenses.create(JSON.parse(self.state_data))
+          self.state_data = nil
+          self.state = nil
+      end
+    else
+      return {
+        type: 'message',
+        data: {
+          text: "I'm sorry, what was that?"
+        }
+      }
+    end
+
   end
 
   def format_expense(message)

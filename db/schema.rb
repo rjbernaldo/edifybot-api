@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20160911004720) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string   "state"
+    t.string   "state_data"
     t.string   "sender_id"
     t.string   "first_name"
     t.string   "last_name"

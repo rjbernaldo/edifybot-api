@@ -16,6 +16,7 @@ class BotController < ApplicationController
       messages.each do |message|
         sender_id = message['sender']['id']
         message_body = message['message']
+        postback_body = message['postback']
 
         user = User.where('sender_id = ?', sender_id).take
 
@@ -35,6 +36,9 @@ class BotController < ApplicationController
         if message_body
           message_response = user.process_message(message_body)
           send_to_facebook(sender_id, message_response)
+        elsif postback_body
+          postback_response = user.process_postback(postback_body)
+          send_to_facebook(sender_id, postback_response)
         end
       end
     end
@@ -53,15 +57,36 @@ class BotController < ApplicationController
   end
 
   def send_to_facebook(sender_id, message_response)
+    puts message_response
     headers = { 'Content-Type' => 'application/json' }
-    body = {
-      recipient: {
-        id: sender_id
-      },
-      message: {
-        text: message_response
-      }
-    }.to_json
+
+    case message_response[:type]
+      when 'message'
+        body = {
+          recipient: {
+            id: sender_id
+          },
+          message: {
+            text: message_response[:data][:text]
+          }
+        }.to_json
+      when 'button'
+        body = {
+          recipient: {
+            id: sender_id
+          },
+          message: {
+            attachment: {
+              type: 'template',
+              payload: {
+                template_type: message_response[:type],
+                text: message_response[:data][:text],
+                buttons: message_response[:data][:buttons]
+              }
+            }
+          }
+        }.to_json
+    end
 
     HTTParty.post(
       "#{FACEBOOK_GRAPH_URL}/v2.6/me/messages?access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}",
