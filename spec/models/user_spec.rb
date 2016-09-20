@@ -9,6 +9,9 @@ RSpec.describe User do
       "text"=>""
     }
   }
+  let(:postback_wrapper) {
+    { 'payload' => "" }
+  }
 
   describe '#determine_action' do
     describe 'GREETING' do
@@ -93,7 +96,13 @@ RSpec.describe User do
 
     describe 'HELP' do
       context 'when message is asking for help' do
-        it 'should respond with "HELP"'
+        it 'should respond with "HELP"' do
+            message = message_wrapper.dup
+            message['text'] = 'help'
+
+            message_action = user.determine_action(message)
+            expect(message_action).to eq('HELP')
+        end
       end
     end
 
@@ -129,11 +138,28 @@ RSpec.describe User do
   describe '#process_postback_action' do
     context 'when action is "NEW_EXPENSE_YES"' do
       context 'when state is "NEW_EXPENSE_CONFIRM"' do
-        it 'should add a new expense for the user'
+        let(:user) { create(:user) }
+        
+        it 'should add a new expense for the user' do
+          postback = postback_wrapper.dup
+          postback['payload'] = 'NEW_EXPENSE_YES'
+          
+          user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
+          postback_response = user.process_postback_action(postback)
+          expect(postback_response[:data][:text]).to eq("New expense added.")
+        end
       end
 
       context 'when state is not "NEW_EXPENSE_CONFIRM"' do
-        it 'should not add a new expense for the user'
+        let(:user) { create(:user) }
+        
+        it 'should not add a new expense for the user' do
+          postback = postback_wrapper.dup
+          postback['payload'] = 'NEW_EXPENSE_YES'
+          
+          postback_response = user.process_postback_action(postback)
+          expect(postback_response[:data][:text]).to eq("I'm sorry, what was that?")
+        end
       end
     end
 

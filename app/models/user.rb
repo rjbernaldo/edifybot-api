@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   include ExpenseFormatter
+  
+  has_many :expenses
 
   def process_message(message)
     message_action = determine_action(message)
@@ -74,9 +76,22 @@ class User < ActiveRecord::Base
     if self.state == 'NEW_EXPENSE_CONFIRM'
       case postback['payload']
         when 'NEW_EXPENSE_YES'
-          self.expenses.create(JSON.parse(self.state_data))
+          self.expenses << Expense.create(JSON.parse(self.state_data))
           self.state_data = nil
           self.state = nil
+          return {
+            type: 'message',
+            data: {
+              text: "New expense added."
+            }
+          }
+        else
+          return {
+            type: 'message',
+            data: {
+              text: "I'm sorry, what was that?"
+            }
+          }
       end
     else
       return {
