@@ -69,13 +69,25 @@ RSpec.describe User do
 
     describe 'NEW EXPENSE' do
       context 'when message is a new expense' do
-        it 'should respond with "NEW_EXPENSE"' do
-          message = message_wrapper.dup
-          message['text'] = '20 ramen @mesho #food'
+        context 'when the expense formatting is correct' do
+          it 'should respond with "NEW_EXPENSE"' do
+            message = message_wrapper.dup
+            message['text'] = '20 ramen @mesho #food'
 
-          message_action = user.determine_action(message)
-          expect(message_action).to eq('NEW_EXPENSE')
+            message_action = user.determine_action(message)
+            expect(message_action).to eq('NEW_EXPENSE')
+          end
         end
+
+        context 'when the expense formatting is incorrect' do
+          it 'should respond with "UNRECOGNIZED"'
+        end
+      end
+    end
+
+    describe 'HELP' do
+      context 'when message is asking for help' do
+        it 'should respond with "HELP"'
       end
     end
 
@@ -92,58 +104,17 @@ RSpec.describe User do
     end
   end
 
-  describe '#format_expense' do
-    context 'when message is valid' do
-      it 'should return a formatted expense' do
-        message = message_wrapper.dup
-        message['text'] = '20 ramen @mensho #food'
-
-        decoded_message = user.format_expense(message)
-        expect(decoded_message[:amount]).to eq('20')
-        expect(decoded_message[:item]).to eq('ramen')
-        expect(decoded_message[:location]).to eq('mensho')
-        expect(decoded_message[:category]).to eq('food')
-      end
-    end
-
-    context 'when message has spaces' do
-      it 'should return a formatted expense' do
-        message = message_wrapper.dup
-        message['text'] = '20 shoyu ramen @ramen underground #comfort food'
-
-        decoded_message = user.format_expense(message)
-        expect(decoded_message[:amount]).to eq('20')
-        expect(decoded_message[:item]).to eq('shoyu ramen')
-        expect(decoded_message[:location]).to eq('ramen underground')
-        expect(decoded_message[:category]).to eq('comfort food')
-      end
-    end
-
-    context 'when order is swapped' do
-      it 'should return a formatted expense' do
-        message = message_wrapper.dup
-        message['text'] = '20 ramen #food @mensho'
-
-        decoded_message = user.format_expense(message)
-        expect(decoded_message[:amount]).to eq('20')
-        expect(decoded_message[:item]).to eq('ramen')
-        expect(decoded_message[:location]).to eq('mensho')
-        expect(decoded_message[:category]).to eq('food')
-      end
-    end
-  end
-
-  describe '#process_action' do
+  describe '#process_message_action' do
     context 'when action is "GREETING"' do
       it 'should respond with a greeting' do
-        message_response = user.process_action('GREETING', nil)
+        message_response = user.process_message_action('GREETING', nil)
         expect(message_response[:data][:text]).to eq('Hi there.')
       end
     end
 
     context 'when action is "UNRECOGNIZED"' do
       it 'should respond appropriately' do
-        message_response = user.process_action('UNRECOGNIZED', nil)
+        message_response = user.process_message_action('UNRECOGNIZED', nil)
         expect(message_response[:data][:text]).to eq("I'm sorry, what was that?")
       end
     end
@@ -151,7 +122,26 @@ RSpec.describe User do
 
   describe '#process_postback_action' do
     context 'when action is "NEW_EXPENSE_YES"' do
-      
+      context 'when state is "NEW_EXPENSE_CONFIRM"' do
+        it 'should add a new expense for the user'
+      end
+
+      context 'when state is not "NEW_EXPENSE_CONFIRM"' do
+        it 'should not add a new expense for the user'
+      end
+    end
+
+    context 'when action is "HELP_ADD_EXPENSE"' do
+      it 'should respond with instructions on how to add an expense'
+    end
+
+    context 'when action is "HELP_SHOW_REPORTS"' do
+      it 'should respond with instructions on how to show reports'
+    end
+
+    context 'when action is "HELP_RESET_TIMEZONE"' do
+      it 'should respond with instructions on how to reset timezone'
     end
   end
+
 end
