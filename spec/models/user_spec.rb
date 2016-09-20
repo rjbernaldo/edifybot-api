@@ -133,6 +133,14 @@ RSpec.describe User do
         expect(message_response[:data][:text]).to eq("I'm sorry, what was that?")
       end
     end
+    
+    context 'when action is "NEW_EXPENSE"' do
+      it 'should respond with buttons'
+    end
+    
+    context 'when action is "HELP"' do
+      it 'should respond with buttons'
+    end
   end
 
   describe '#process_postback_action' do
