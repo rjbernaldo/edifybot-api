@@ -80,7 +80,13 @@ RSpec.describe User do
         end
 
         context 'when the expense formatting is incorrect' do
-          it 'should respond with "UNRECOGNIZED"'
+          it 'should respond with "UNRECOGNIZED"' do
+            message = message_wrapper.dup
+            message['text'] = '20 @mensho ramen #food'
+
+            message_action = user.determine_action(message)
+            expect(message_action).to eq('UNRECOGNIZED')
+          end
         end
       end
     end

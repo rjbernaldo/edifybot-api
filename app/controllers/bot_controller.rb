@@ -57,7 +57,6 @@ class BotController < ApplicationController
   end
 
   def send_to_facebook(sender_id, message_response)
-    puts message_response
     headers = { 'Content-Type' => 'application/json' }
 
     case message_response[:type]

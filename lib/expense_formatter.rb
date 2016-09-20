@@ -1,11 +1,17 @@
 module ExpenseFormatter
   def format_expense(message)
-    return {
+    expense = {
       amount: parse_amount(message),
       item: parse_item(message),
       location: parse_location(message),
       category: parse_category(message)
     }
+    
+    if expense[:item] == '' || !(expense[:amount] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/)
+      return nil
+    else
+      return expense
+    end
   end
 
   private
