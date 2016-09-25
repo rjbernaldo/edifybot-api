@@ -136,6 +136,21 @@ class User < ActiveRecord::Base
         else
           return UNRECOGNIZED_RESPONSE
         end
+      when 'NEW_EXPENSE_NO'
+        if self.state == 'NEW_EXPENSE_CONFIRM'
+          self.state_data = nil
+          self.state = nil
+          self.save
+
+          return {
+            type: 'message',
+            data: {
+              text: "Expense not saved."
+            }
+          }
+        else
+          return UNRECOGNIZED_RESPONSE
+        end
       when 'HELP_NEW_EXPENSE'
         return {
           type: 'message',

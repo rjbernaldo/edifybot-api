@@ -189,29 +189,28 @@ RSpec.describe User do
 
   describe '#process_postback_action' do
     context 'when action is "NEW_EXPENSE_YES"' do
-      context 'when state is "NEW_EXPENSE_CONFIRM"' do
-        let(:user) { create(:user) }
+      let(:user) { create(:user) }
 
-        it 'should add a new expense for the user' do
-          postback = postback_wrapper.dup
-          postback['payload'] = 'NEW_EXPENSE_YES'
+      it 'should add a new expense for the user' do
+        postback = postback_wrapper.dup
+        postback['payload'] = 'NEW_EXPENSE_YES'
 
-          user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
-          postback_response = user.process_postback_action(postback)
-          expect(postback_response[:data][:text]).to eq("New expense added.")
-        end
+        user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
+        postback_response = user.process_postback_action(postback)
+        expect(postback_response[:data][:text]).to eq("New expense added.")
       end
+    end
 
-      context 'when state is not "NEW_EXPENSE_CONFIRM"' do
-        let(:user) { create(:user) }
+    context 'when action is "NEW_EXPENSE_NO"' do
+      let(:user) { create(:user) }
 
-        it 'should not add a new expense for the user' do
-          postback = postback_wrapper.dup
-          postback['payload'] = 'NEW_EXPENSE_YES'
+      it 'should not add a new expense for the user' do
+        postback = postback_wrapper.dup
+        postback['payload'] = 'NEW_EXPENSE_NO'
 
-          postback_response = user.process_postback_action(postback)
-          expect(postback_response[:data][:text]).to eq("I'm sorry, what was that?")
-        end
+        user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
+        postback_response = user.process_postback_action(postback)
+        expect(postback_response[:data][:text]).to eq("Expense not saved.")
       end
     end
 
