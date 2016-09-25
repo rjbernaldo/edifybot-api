@@ -10,6 +10,10 @@ class CreateUsers < ActiveRecord::Migration
       t.string :locale
       t.string :timezone
       t.string :gender
+      t.string :currency
+      t.string :currency_symbol
+
+      t.boolean :new_user
 
       t.timestamps null: false
     end

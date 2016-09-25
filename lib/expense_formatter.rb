@@ -6,7 +6,7 @@ module ExpenseFormatter
       location: parse_location(message),
       category: parse_category(message)
     }
-    
+
     if expense[:item] == '' || !(expense[:amount] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/)
       return nil
     else

@@ -29,11 +29,15 @@ class BotController < ApplicationController
             profile_pic: body['profile_pic'],
             locale: body['locale'],
             timezone: body['timezone'],
-            gender: body['gender']
+            gender: body['gender'],
+            new_user: true
           )
         end
 
-        if message_body
+        if user[:new_user]
+          message_response = user.process_new_user
+          send_to_facebook(sender_id, message_response)
+        elsif message_body
           message_response = user.process_message(message_body)
           send_to_facebook(sender_id, message_response)
         elsif postback_body

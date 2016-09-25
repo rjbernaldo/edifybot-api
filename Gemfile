@@ -8,6 +8,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'httparty'
+gem 'chronic'
 
 group :production do
   gem 'pg', '0.18.4'
