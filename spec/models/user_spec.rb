@@ -172,7 +172,7 @@ RSpec.describe User do
         user.expenses << expense
         message_response = user.process_message_action('REPORTS')
 
-        expect(message_response[:data][:text]).to eq("Daily: 20\nWeekly: 20\nMonthly: 20\n\nView report dashboard: https://google.com")
+        expect(message_response[:data][:text]).to eq("Daily: 20\nWeekly: 20\nMonthly: 20")
       end
     end
 

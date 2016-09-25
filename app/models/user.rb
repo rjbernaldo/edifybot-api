@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
         return {
           type: 'message',
           data: {
-            text: "Daily: #{daily}\nWeekly: #{weekly}\nMonthly: #{monthly}\n\nView report dashboard: https://google.com"
+            text: "Daily: #{daily}\nWeekly: #{weekly}\nMonthly: #{monthly}"
           }
         }
       when 'HELP'
