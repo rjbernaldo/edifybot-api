@@ -76,4 +76,22 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  GREETING_MESSAGES = ['hi', 'hello']
+  HELP_MESSAGES = ['help']
+  REPORTS_MESSAGES = ['report']
+  RESET_LOCATION_MESSAGES = ['reset location']
+  FACEBOOK_GRAPH_URL = 'https://graph.facebook.com'
+  FACEBOOK_PAGE_ACCESS_TOKEN = 'EAAINb8zUjRgBAJo2qR1IHB94ZBPF5LSxGUy28HMt0O3b2vKNC2L0VQMrxAq5sAoZCCe8iaEv76jTsbwJBacavjuJetTCSNXC0fxALk3khZB09DQwJXP08c7ZAyZAk9KpxDZAjl42np4i5b0xavJBV1ZBzLggY97MybbD2SJ57tjGwZDZD'
+
+  GREETING_MESSAGE_RESPONSES = [
+    'Hi there.',
+    "What's up?"
+  ]
+
+  UNRECOGNIZED_RESPONSE = {
+    type: 'message',
+    data: {
+      text: "I'm sorry, what was that?"
+    }
+  }
 end
