@@ -120,14 +120,13 @@ class User < ActiveRecord::Base
           elements: [
             {
               title: 'Expense Report',
-              item_url: 'https://google.com',
               subtitle: "Daily: #{self.currency_symbol}#{daily}\nWeekly: #{self.currency_symbol}#{weekly}\nMonthly: #{self.currency_symbol}#{monthly}",
               buttons: [
                 {
                   type: 'web_url',
                   url: 'https://google.com',
                   title: 'View full report',
-                  webview_height_ratio: 'tall'
+                  webview_height_ratio: 'compact'
                 }
               ]
             }
