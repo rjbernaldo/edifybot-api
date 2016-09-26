@@ -46,8 +46,8 @@ class User < ActiveRecord::Base
       return 'GREETING'
     elsif HELP_MESSAGES.include?(message_text.downcase)
       return 'HELP'
-    elsif REPORTS_MESSAGES.include?(message_text.downcase)
-      return 'REPORTS'
+    elsif REPORT_MESSAGES.include?(message_text.downcase)
+      return 'REPORT'
     else
       return 'UNRECOGNIZED'
     end
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
         self.save
         
         return self.last_response
-      when 'REPORTS'
+      when 'REPORT'
         daily = generate_daily_report
         weekly = generate_weekly_report
         monthly = generate_monthly_report

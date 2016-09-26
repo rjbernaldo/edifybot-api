@@ -67,14 +67,14 @@ RSpec.describe User do
       end
     end
 
-    describe 'REPORTS' do
+    describe 'REPORT' do
       context 'when message is report' do
         it 'should respond with "REPORT"' do
           message = message_wrapper.dup
           message['text'] = 'report'
 
           message_action = user.determine_action(message)
-          expect(message_action).to eq('REPORTS')
+          expect(message_action).to eq('REPORT')
         end
       end
     end
@@ -185,12 +185,12 @@ RSpec.describe User do
       end
     end
 
-    context 'when action is "REPORTS"' do
+    context 'when action is "REPORT"' do
       let(:expense) { create(:expense, amount: 20) }
 
       it "should respond with a report of the user's expenses" do
         user.expenses << expense
-        message_response = user.process_message_action('REPORTS')
+        message_response = user.process_message_action('REPORT')
 
         expect(message_response[:data][:text]).to eq("Daily: #{user.currency_symbol}20\nWeekly: #{user.currency_symbol}20\nMonthly: #{user.currency_symbol}20")
       end
