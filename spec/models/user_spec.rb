@@ -192,10 +192,10 @@ RSpec.describe User do
         user.expenses << expense
         message_response = user.process_message_action('REPORT')
 
-        expect(message_response[:data][:text]).to eq("Daily: #{user.currency_symbol}20\nWeekly: #{user.currency_symbol}20\nMonthly: #{user.currency_symbol}20")
-        expect(message_response[:data][:buttons][0][:type]).to eq('web_url')
-        expect(message_response[:data][:buttons][0][:title]).to eq('View full report')
-        expect(message_response[:data][:buttons][0][:webview_height_ratio]).to eq('tall')
+        expect(message_response[:elements][0][:subtitle]).to eq("Daily: #{user.currency_symbol}20\nWeekly: #{user.currency_symbol}20\nMonthly: #{user.currency_symbol}20")
+        expect(message_response[:elements][0][:buttons][0][:type]).to eq('web_url')
+        expect(message_response[:elements][0][:buttons][0][:title]).to eq('View full report')
+        expect(message_response[:elements][0][:buttons][0][:webview_height_ratio]).to eq('tall')
       end
     end
 

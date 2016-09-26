@@ -116,18 +116,22 @@ class User < ActiveRecord::Base
         monthly = generate_monthly_report
 
         return {
-          type: 'button',
-          data: {
-            text: "Daily: #{self.currency_symbol}#{daily}\nWeekly: #{self.currency_symbol}#{weekly}\nMonthly: #{self.currency_symbol}#{monthly}",
-            buttons: [
-              {
-                type: 'web_url',
-                url: 'https://google.com',
-                title: 'View full report',
-                webview_height_ratio: 'tall'
-              }
-            ]
-          }
+          type: 'generic',
+          elements: [
+            {
+              title: 'Expense Report',
+              item_url: 'https://google.com',
+              subtitle: "Daily: #{self.currency_symbol}#{daily}\nWeekly: #{self.currency_symbol}#{weekly}\nMonthly: #{self.currency_symbol}#{monthly}",
+              buttons: [
+                {
+                  type: 'web_url',
+                  url: 'https://google.com',
+                  title: 'View full report',
+                  webview_height_ratio: 'tall'
+                }
+              ]
+            }
+          ]
         }
       when 'HELP'
         return {

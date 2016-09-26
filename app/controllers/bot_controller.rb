@@ -89,6 +89,21 @@ class BotController < ApplicationController
             }
           }
         }.to_json
+      when 'generic'
+        body = {
+          recipient: {
+            id: sender_id
+          },
+          message: {
+            attachment: {
+              type: 'template',
+              payload: {
+                template_type: message_response[:type],
+                elements: message_response[:elements]
+              }
+            }
+          }
+        }.to_json
     end
 
     HTTParty.post(
