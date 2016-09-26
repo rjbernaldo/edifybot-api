@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
         category = formatted_message[:category]
         
         message_text = [
-          "💵 #{amount}",
+          "💵 #{self.currency_symbol}#{amount}",
           "📦 #{item}"
         ]
         
@@ -120,7 +120,7 @@ class User < ActiveRecord::Base
         return {
           type: 'message',
           data: {
-            text: "Daily: #{daily}\nWeekly: #{weekly}\nMonthly: #{monthly}"
+            text: "Daily: #{self.currency_symbol}#{daily}\nWeekly: #{self.currency_symbol}#{weekly}\nMonthly: #{self.currency_symbol}#{monthly}"
           }
         }
       when 'HELP'

@@ -179,7 +179,7 @@ RSpec.describe User do
       it 'should respond with buttons' do
         message_response = user.process_message_action('NEW_EXPENSE', { 'text' => '20 ramen @mensho #food' })
 
-        expect(message_response[:data][:text]).to eq("💵 20\n📦 ramen\n📍 mensho\n📂 food\n\nIs this correct? 🤔")
+        expect(message_response[:data][:text]).to eq("💵 #{user.currency_symbol}20\n📦 ramen\n📍 mensho\n📂 food\n\nIs this correct? 🤔")
         expect(message_response[:data][:buttons][0][:payload]).to eq('NEW_EXPENSE_YES')
         expect(message_response[:data][:buttons][1][:payload]).to eq('NEW_EXPENSE_NO')
       end
@@ -192,7 +192,7 @@ RSpec.describe User do
         user.expenses << expense
         message_response = user.process_message_action('REPORTS')
 
-        expect(message_response[:data][:text]).to eq("Daily: 20\nWeekly: 20\nMonthly: 20")
+        expect(message_response[:data][:text]).to eq("Daily: #{user.currency_symbol}20\nWeekly: #{user.currency_symbol}20\nMonthly: #{user.currency_symbol}20")
       end
     end
 
