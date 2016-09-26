@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160911004720) do
+ActiveRecord::Schema.define(version: 20160926020026) do
 
   create_table "expenses", force: :cascade do |t|
     t.integer  "user_id"
@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 20160911004720) do
     t.string   "gender"
     t.string   "currency"
     t.string   "currency_symbol"
-    t.text     "last_response"
     t.boolean  "new_user"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.text     "last_response"
   end
 
 end
