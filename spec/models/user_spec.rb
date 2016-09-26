@@ -43,6 +43,16 @@ RSpec.describe User do
           expect(message_action).to eq('GREETING')
         end
       end
+      
+      context 'when message is capitalized' do
+        it 'should respond with "GREETING"' do
+          message = message_wrapper.dup
+          message['text'] = 'Hi'
+
+          message_action = user.determine_action(message)
+          expect(message_action).to eq('GREETING')
+        end
+      end
     end
 
     describe 'HELP' do
@@ -53,16 +63,6 @@ RSpec.describe User do
 
           message_action = user.determine_action(message)
           expect(message_action).to eq('HELP')
-        end
-      end
-
-      context 'when message is reset location' do # TODO: Maybe payload?
-        it 'should respond with "RESET_LOCATION"' do
-          message = message_wrapper.dup
-          message['text'] = 'reset location'
-
-          message_action = user.determine_action(message)
-          expect(message_action).to eq('RESET_LOCATION')
         end
       end
     end

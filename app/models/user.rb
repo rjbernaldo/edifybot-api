@@ -42,14 +42,12 @@ class User < ActiveRecord::Base
       return 'WAITING_FOR_CONFIRMATION'
     elsif message_text.split(' ')[0] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ && format_expense(message)
       return 'NEW_EXPENSE'
-    elsif GREETING_MESSAGES.include?(message_text)
+    elsif GREETING_MESSAGES.include?(message_text.downcase)
       return 'GREETING'
-    elsif HELP_MESSAGES.include?(message_text)
+    elsif HELP_MESSAGES.include?(message_text.downcase)
       return 'HELP'
-    elsif REPORTS_MESSAGES.include?(message_text)
+    elsif REPORTS_MESSAGES.include?(message_text.downcase)
       return 'REPORTS'
-    elsif RESET_LOCATION_MESSAGES.include?(message_text)
-      return 'RESET_LOCATION'
     else
       return 'UNRECOGNIZED'
     end
