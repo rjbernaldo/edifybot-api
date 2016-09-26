@@ -12,6 +12,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :gender
       t.string :currency
       t.string :currency_symbol
+      
+      t.text :last_response
 
       t.boolean :new_user
 

@@ -117,13 +117,14 @@ RSpec.describe User do
 
     describe 'WAITING_FOR_CONFIRMATION' do
       context 'when we are still waiting for a confirmation postback' do
-        it 'should respond with the last message'
-          # user.state != nil
-          # message = message_wrapper.dup
-          # message['text'] = 'something else'
-          #
-          # message_action = user.determine_action(message)
-          # expect(message_action).to eq('HELP')
+        it 'should respond with the last message' do
+          user.state = 'NEW_EXPENSE_CONFIRM'
+          message = message_wrapper.dup
+          message['text'] = 'something else'
+          
+          message_action = user.determine_action(message)
+          expect(message_action).to eq('WAITING_FOR_CONFIRMATION')
+        end
       end
     end
 
@@ -147,11 +148,30 @@ RSpec.describe User do
         expect(GREETING_MESSAGE_RESPONSES.include?(message_response[:data][:text])).to eq(true)
       end
     end
+    
+    context 'when action is "WAITING_FOR_CONFIRMATION"' do
+      it 'should respond with the last message' do
+        user.last_response = {
+          type: 'button',
+          data: {
+            buttons: [
+              {
+                type: 'postback'
+              }
+            ]
+          }
+        }
+        
+        message_response = user.process_message_action('WAITING_FOR_CONFIRMATION', nil)
+        expect(message_response[:type]).to eq('button')
+        expect(message_response[:data][:buttons][0][:type]).to eq('postback')
+      end
+    end
 
     context 'when action is "UNRECOGNIZED"' do
       it 'should respond appropriately' do
         message_response = user.process_message_action('UNRECOGNIZED', nil)
-        expect(message_response[:data][:text]).to eq("I'm sorry, what was that?")
+        expect(message_response[:data][:text]).to eq(UNRECOGNIZED_RESPONSE[:data][:text])
       end
     end
 
@@ -159,7 +179,7 @@ RSpec.describe User do
       it 'should respond with buttons' do
         message_response = user.process_message_action('NEW_EXPENSE', { 'text' => '20 ramen @mensho #food' })
 
-        expect(message_response[:data][:text]).to eq("Correct?") # TODO: confirm expense message
+        expect(message_response[:data][:text]).to eq("💵 20\n📦 ramen\n📍 mensho\n📂 food\n\nIs this correct? 🤔")
         expect(message_response[:data][:buttons][0][:payload]).to eq('NEW_EXPENSE_YES')
         expect(message_response[:data][:buttons][1][:payload]).to eq('NEW_EXPENSE_NO')
       end
@@ -180,7 +200,7 @@ RSpec.describe User do
       it 'should respond with buttons' do
         message_response = user.process_message_action('HELP')
 
-        expect(message_response[:data][:text]).to eq('What can I help you with?')
+        expect(HELP_RESPONSE.include?(message_response[:data][:text])).to eq(true)
         expect(message_response[:data][:buttons][0][:payload]).to eq('HELP_NEW_EXPENSE')
         expect(message_response[:data][:buttons][1][:payload]).to eq('HELP_SHOW_REPORT')
       end
@@ -197,7 +217,7 @@ RSpec.describe User do
 
         user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
         postback_response = user.process_postback_action(postback)
-        expect(postback_response[:data][:text]).to eq("New expense added.")
+        expect(NEW_EXPENSE_ADDED_RESPONSE.include?(postback_response[:data][:text])).to eq(true)
       end
     end
 
@@ -210,7 +230,7 @@ RSpec.describe User do
 
         user.update_attributes(state: 'NEW_EXPENSE_CONFIRM', state_data: "{}")
         postback_response = user.process_postback_action(postback)
-        expect(postback_response[:data][:text]).to eq("Expense not saved.")
+        expect(EXPENSE_NOT_SAVED_RESPONSE.include?(postback_response[:data][:text])).to eq(true)
       end
     end
 

@@ -47,14 +47,26 @@ Rails.application.configure do
   FACEBOOK_PAGE_ACCESS_TOKEN = 'EAAINb8zUjRgBAJo2qR1IHB94ZBPF5LSxGUy28HMt0O3b2vKNC2L0VQMrxAq5sAoZCCe8iaEv76jTsbwJBacavjuJetTCSNXC0fxALk3khZB09DQwJXP08c7ZAyZAk9KpxDZAjl42np4i5b0xavJBV1ZBzLggY97MybbD2SJ57tjGwZDZD'
 
   GREETING_MESSAGE_RESPONSES = [
-    'Hi there.',
-    "What's up?"
+    'Hi there. 🤓',
+    "What's up? 🙂"
   ]
 
   UNRECOGNIZED_RESPONSE = {
     type: 'message',
     data: {
-      text: "I'm sorry, what was that?"
+      text: "I'm sorry, what was that? 😕"
     }
   }
+  
+  NEW_EXPENSE_ADDED_RESPONSE = [
+    "New expense added. 👍"  
+  ]
+  
+  EXPENSE_NOT_SAVED_RESPONSE = [
+    "Expense not saved. 👌"
+  ]
+  
+  HELP_RESPONSE = [
+    'What can I help you with? ℹ️'
+  ]
 end

@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20160911004720) do
     t.string   "gender"
     t.string   "currency"
     t.string   "currency_symbol"
+    t.text     "last_response"
     t.boolean  "new_user"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false

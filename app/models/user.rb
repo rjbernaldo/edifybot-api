@@ -1,13 +1,12 @@
 class User < ActiveRecord::Base
   include ExpenseFormatter
 
+  serialize :last_response
   has_many :expenses
 
   def process_new_user
     self.new_user = false
-    self.save
-
-    return {
+    self.last_response = {
       type: 'button',
       data: {
         text: "Hi #{self.first_name}. Please select your currency so we can get started.",
@@ -20,6 +19,9 @@ class User < ActiveRecord::Base
         ]
       }
     }
+    self.save
+    
+    return self.last_response
   end
 
   def process_message(message)
@@ -36,7 +38,9 @@ class User < ActiveRecord::Base
   def determine_action(message)
     message_text = message['text']
 
-    if message_text.split(' ')[0] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ && format_expense(message)
+    if self.state == 'NEW_EXPENSE_CONFIRM'
+      return 'WAITING_FOR_CONFIRMATION'
+    elsif message_text.split(' ')[0] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ && format_expense(message)
       return 'NEW_EXPENSE'
     elsif GREETING_MESSAGES.include?(message_text)
       return 'GREETING'
@@ -53,6 +57,8 @@ class User < ActiveRecord::Base
 
   def process_message_action(message_action, message = nil)
     case message_action
+      when 'WAITING_FOR_CONFIRMATION'
+        return self.last_response
       when 'GREETING'
         return {
           type: 'message',
@@ -63,28 +69,49 @@ class User < ActiveRecord::Base
       when 'UNRECOGNIZED'
         return UNRECOGNIZED_RESPONSE
       when 'NEW_EXPENSE'
+        formatted_message = format_expense(message)
         self.state = 'NEW_EXPENSE_CONFIRM'
-        self.state_data = format_expense(message).to_json
-        self.save
-
-        return {
+        self.state_data = formatted_message.to_json
+        
+        amount = formatted_message[:amount]
+        item = formatted_message[:item]
+        location = formatted_message[:location]
+        category = formatted_message[:category]
+        
+        message_text = [
+          "💵 #{amount}",
+          "📦 #{item}"
+        ]
+        
+        if location
+          message_text.push("📍 #{location}")
+        end
+        
+        if category
+          message_text.push("📂 #{category}")
+        end
+        
+        self.last_response = {
           type: 'button',
           data: {
-            text: 'Correct?',
+            text: "#{message_text.join("\n")}\n\nIs this correct? 🤔",
             buttons: [
               {
                 type: 'postback',
-                title: 'Yes',
+                title: 'Yes ✔️',
                 payload: 'NEW_EXPENSE_YES'
               },
               {
                 type: 'postback',
-                title: 'No',
+                title: 'No ❌',
                 payload: 'NEW_EXPENSE_NO'
               }
             ]
           }
         }
+        self.save
+        
+        return self.last_response
       when 'REPORTS'
         daily = generate_daily_report
         weekly = generate_weekly_report
@@ -100,7 +127,7 @@ class User < ActiveRecord::Base
         return {
           type: 'button',
           data: {
-            text: 'What can I help you with?',
+            text: HELP_RESPONSE.sample,
             buttons: [
               {
                 type: 'postback',
@@ -123,6 +150,7 @@ class User < ActiveRecord::Base
       when 'NEW_EXPENSE_YES'
         if self.state == 'NEW_EXPENSE_CONFIRM'
           self.expenses << Expense.create(JSON.parse(self.state_data))
+          self.last_response = nil
           self.state_data = nil
           self.state = nil
           self.save
@@ -130,14 +158,15 @@ class User < ActiveRecord::Base
           return {
             type: 'message',
             data: {
-              text: "New expense added."
+              text: NEW_EXPENSE_ADDED_RESPONSE.sample
             }
           }
         else
-          return UNRECOGNIZED_RESPONSE
+          return UNRECOGNIZED_RESPONSE.sample
         end
       when 'NEW_EXPENSE_NO'
         if self.state == 'NEW_EXPENSE_CONFIRM'
+          self.last_response = nil
           self.state_data = nil
           self.state = nil
           self.save
@@ -145,7 +174,7 @@ class User < ActiveRecord::Base
           return {
             type: 'message',
             data: {
-              text: "Expense not saved."
+              text: EXPENSE_NOT_SAVED_RESPONSE.sample
             }
           }
         else
@@ -166,6 +195,7 @@ class User < ActiveRecord::Base
           }
         }
       when 'NEW_USER_PESO'
+        self.last_response = nil
         self.currency = 'Peso'
         self.currency_symbol = '₱'
         self.save
