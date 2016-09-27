@@ -4,7 +4,8 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/only-dev-server',
-    './src/index.js'
+    'react-hot-loader/patch',
+    './src/index'
   ],
   module: {
     loaders: [{
@@ -29,3 +30,4 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin()
   ]
 }
+
