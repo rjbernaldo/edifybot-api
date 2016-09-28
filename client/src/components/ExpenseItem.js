@@ -19,6 +19,6 @@ export default class ExpenseItem extends Component {
         </div>
         <ExpenseInput />
       </li>
-    )
+    );
   }
 }

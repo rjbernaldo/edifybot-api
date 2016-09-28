@@ -18,6 +18,6 @@ export default class ExpenseList extends Component {
           }
         </ul>
       </section>
-    )
+    );
   }
 }
