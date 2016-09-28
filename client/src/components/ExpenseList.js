@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ExpenseItem from './ExpenseItem';
 
 export default class ExpenseList extends Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   render() {
     return (
       <section className="main">
