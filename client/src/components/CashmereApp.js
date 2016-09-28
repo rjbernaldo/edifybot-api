@@ -1,28 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
+import ExpenseList from './ExpenseList';
 
-export default class CashmereApp extends React.Component {
+export default class CashmereApp extends Component {
   getExpenses() {
     return this.props.expenses || [];
   }
   render() {
-    return <div>
-      <section className="cashmereApp">
-        <section className="main">
-          <ul className="expense-list">
-            {this.getExpenses().map(expense =>
-              <li className="active" key={expense.get('text')}>
-                <div className="view">
-                  <input type="checkbox" className="toggle" />
-                  <label htmlFor="expense">
-                    {expense.get('text')}
-                  </label>
-                  <button className="destroy"></button>
-                </div>
-              </li>
-            )}
-          </ul>
+    return (
+      <div>
+        <section className="cashmere-app">
+          <ExpenseList expenses={ this.getExpenses() } />
         </section>
-      </section>
-    </div>
+      </div>
+    );
   }
 }
