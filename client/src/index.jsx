@@ -14,5 +14,5 @@ const expenses = List.of(
 
 ReactDOM.render(
   <CashmereApp expenses={expenses} />,
-  documetn.getElementById('app')
+  document.getElementById('app')
 );
