@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js 'test/**/*.@(js|jsx)'",
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register --require ./test/setup.js 'test/**/*.@(js|jsx)'",
     "test:watch": "npm run test -- --watch --watch-extensions jsx"
   },
   "author": "Rj Bernaldo",
