@@ -12,22 +12,24 @@ module.exports = {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: 'babel'
+    }, {
+      test: /\.css$/,
+      loader: 'style!css'
     }]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/dist',
+    path: __dirname + '/../public',
     publicPath: '/',
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: '../public',
     hot: true
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ]
 }
-

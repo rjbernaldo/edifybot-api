@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ExpenseInput from './ExpenseInput';
 
 export default class ExpenseItem extends Component {
   constructor(props) {
@@ -9,16 +8,12 @@ export default class ExpenseItem extends Component {
   }
   render() {
     return (
-      <li className="expense">
-        <div className="view">
-          <input type="checkbox" className="toggle" />
-          <label htmlFor="expense">
-            { this.props.text }
-          </label>
-          <button className="destroy"></button>
-        </div>
-        <ExpenseInput />
-      </li>
+      <tr>
+        <td>{ this.props.expense.get('item') }</td>
+        <td>{ this.props.expense.get('location') }</td>
+        <td>{ this.props.expense.get('category') }</td>
+        <td>{ this.props.expense.get('amount') }</td>
+      </tr>
     );
   }
 }

@@ -9,14 +9,32 @@ export default class ExpenseList extends Component {
   }
   render() {
     return (
-      <section className="main">
-        <ul className="expense-list">
-          { 
-            this.props.expenses.map(expense =>
-              <ExpenseItem key={ expense.get('text') } text={ expense.get('text') } />
-            ) 
-          }
-        </ul>
+      <section>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Location</th>
+              <th>Category</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.props.expenses.map(expense =>
+                <ExpenseItem key={ expense.get('id') } expense={ expense } />
+              )
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td></td>
+              <td></td>
+              <td>500</td>
+            </tr>
+          </tfoot>
+        </table>
       </section>
     );
   }

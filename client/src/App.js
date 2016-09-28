@@ -3,10 +3,7 @@ import { List, Map } from 'immutable';
 import CashmereApp from './components/CashmereApp';
 
 const expenses = List.of(
-  Map({ id: 1, text: 'React1', status: 'active', editing: false }),
-  Map({ id: 2, text: 'React2', status: 'active', editing: false }),
-  Map({ id: 3, text: 'React3', status: 'active', editing: false }),
-  Map({ id: 4, text: 'React4', status: 'active', editing: false }),
+  Map({ id: 1, item: 'Ramen', location: 'Ramen Underground', category: 'Food', amount: 20 }),
 )
 
 export default class App extends Component {

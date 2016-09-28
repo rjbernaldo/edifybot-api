@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './App';
 
+require('./lib/kube-6.0.1/dist/css/kube.css');
+// require('./lib/kube-6.0.1/dist/js/kube.js');
+
 const rootEl = document.getElementById('app');
 
 ReactDOM.render(
