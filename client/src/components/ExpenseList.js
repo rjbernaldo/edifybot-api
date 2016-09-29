@@ -22,7 +22,7 @@ export default class ExpenseList extends Component {
           <tbody>
             {
               this.props.expenses.map(expense =>
-                <ExpenseItem key={ expense.get('id') } expense={ expense } />
+                <ExpenseItem key={ expense.id } expense={ expense } />
               )
             }
           </tbody>

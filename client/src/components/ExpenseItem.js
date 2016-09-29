@@ -9,10 +9,10 @@ export default class ExpenseItem extends Component {
   render() {
     return (
       <tr>
-        <td>{ this.props.expense.get('item') }</td>
-        <td>{ this.props.expense.get('location') }</td>
-        <td>{ this.props.expense.get('category') }</td>
-        <td>{ this.props.expense.get('amount') }</td>
+        <td>{ this.props.expense.item }</td>
+        <td>{ this.props.expense.location }</td>
+        <td>{ this.props.expense.category }</td>
+        <td>{ this.props.expense.amount }</td>
       </tr>
     );
   }
