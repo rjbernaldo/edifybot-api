@@ -14,7 +14,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    fetch('users/950498005077644/search?from=2016-09-29&to=2016-09-29')
+    fetch('http://cashmerebot.herokuapp.com/users/950498005077644/search?from=2016-09-29&to=2016-09-29')
       .then((response) => {
         return response.json()
       }).then((expenses) => {
