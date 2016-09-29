@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
       }
     }
     self.save
-    
+
     return self.last_response
   end
 
@@ -70,25 +70,25 @@ class User < ActiveRecord::Base
         formatted_message = format_expense(message)
         self.state = 'NEW_EXPENSE_CONFIRM'
         self.state_data = formatted_message.to_json
-        
+
         amount = formatted_message[:amount]
         item = formatted_message[:item]
         location = formatted_message[:location]
         category = formatted_message[:category]
-        
+
         message_text = [
           "💵 #{self.currency_symbol}#{amount}",
           "📦 #{item}"
         ]
-        
+
         if location
           message_text.push("📍 #{location}")
         end
-        
+
         if category
           message_text.push("📂 #{category}")
         end
-        
+
         self.last_response = {
           type: 'button',
           data: {
@@ -108,7 +108,7 @@ class User < ActiveRecord::Base
           }
         }
         self.save
-        
+
         return self.last_response
       when 'REPORT'
         daily = generate_daily_report
@@ -126,7 +126,7 @@ class User < ActiveRecord::Base
                   type: 'web_url',
                   url: 'https://google.com',
                   title: 'View full report',
-                  webview_height_ratio: 'compact'
+                  webview_height_ratio: 'tall'
                 }
               ]
             }
