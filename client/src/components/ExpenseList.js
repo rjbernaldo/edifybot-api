@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ExpenseItem from './ExpenseItem';
 
 export default class ExpenseList extends Component {
   constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    super(props)
   }
+
   render() {
+    const { handleClick } = this.props.handlers;
+    let expenses = this.props.expenses;
+
     return (
       <section>
         <table>
@@ -20,11 +22,9 @@ export default class ExpenseList extends Component {
             </tr>
           </thead>
           <tbody>
-            {
-              this.props.expenses.map(expense =>
-                <ExpenseItem key={ expense.id } expense={ expense } />
-              )
-            }
+            {expenses.map(expense =>
+              <ExpenseItem key={ expense.id } expense={ expense } handleClick={ handleClick } />
+            )}
           </tbody>
           <tfoot>
             <tr>

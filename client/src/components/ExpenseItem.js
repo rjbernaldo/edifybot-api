@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { showModal } from '../actions';
 
 export default class ExpenseItem extends Component {
   constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    super(props)
   }
+
+  handleClick() {
+    this.props.handleClick({
+      type: 'EDIT_EXPENSE',
+      props: this.props
+    });
+  }
+
   render() {
+    var handleClick = this.handleClick.bind(this);
+
     return (
-      <tr>
+      <tr onClick={ handleClick }>
         <td>{ this.props.expense.item }</td>
         <td>{ this.props.expense.location }</td>
         <td>{ this.props.expense.category }</td>
