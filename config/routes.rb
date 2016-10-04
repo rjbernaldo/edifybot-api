@@ -8,6 +8,6 @@ Rails.application.routes.draw do
   get 'users/:sender_id/expenses' => 'expenses#index'
   get 'users/:sender_id/expenses/:id' => 'expenses#show'
   # post 'users/:sender_id/expenses/:id' => 'expenses#create'
-  # put 'users/:sender_id/expenses/:id' => 'expenses#update'
+  patch 'users/:sender_id/expenses/:id' => 'expenses#update'
   delete 'users/:sender_id/expenses/:id' => 'expenses#destroy'
 end

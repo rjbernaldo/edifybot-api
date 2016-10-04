@@ -24,20 +24,28 @@ export function invalidateData() {
 }
 
 export function fetchData() {
+  const expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
+  
   return function(dispatch) {
     dispatch(requestData())
 
-    var data = [
-      { id: 1, item: 'Ramen', location: 'Ramen Underground', category: 'Food', amount: '20' },
-      { id: 2, item: 'Chicken', location: 'Chicken Underground', category: 'Food', amount: '21' },
-      { id: 3, item: 'Pork', location: 'Pork Underground', category: 'Food', amount: '25' }
-    ];
+    return fetch(expensesUrl)
+      .then(response => response.json())
+      .then(json => dispatch(receiveData(json)));
+  }
+}
 
-    return dispatch(receiveData(data));
-
-    // return fetch('http://google.com')
-    //   // .then(response = response.json())
-    //   // .then(json => dispatch(receivePosts(json)));
+export function updateExpense(expense) {
+  const expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
+  
+  return function() {
+    console.log(expense);
+    return fetch(`${expensesUrl}/${expense.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        expense: expense
+      })
+    });
   }
 }
 

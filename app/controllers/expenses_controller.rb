@@ -38,10 +38,14 @@ class ExpensesController < ApplicationController
   #   user.expenses.where(id: params[:id])
   # end
 
-  # def update
-  #   user = User.find_by_sender_id(params[:sender_id])
-  #   user.expenses.where(id: params[:id])
-  # end
+  def update
+    user = User.find_by_sender_id(params[:sender_id])
+    expense = user.expenses.where(id: params[:id]).take
+    byebug
+    expense.update_attributes(expense)
+    
+    render :json => expense
+  end
 
   def destroy
     user = User.find_by_sender_id(params[:sender_id])
