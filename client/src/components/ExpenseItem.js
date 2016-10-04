@@ -3,13 +3,13 @@ import { showModal } from '../actions';
 
 export default class ExpenseItem extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   handleClick() {
-    this.props.handleClick({
-      type: 'EDIT_EXPENSE',
-      props: this.props
+    this.props.handleOpenModal({
+      modalType: 'EDIT_EXPENSE',
+      modalProps: this.props
     });
   }
 

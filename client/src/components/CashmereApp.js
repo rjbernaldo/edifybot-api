@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import ExpenseList from './ExpenseList';
 import { showModal } from '../actions';
+import { ModalContainer } from '../containers/ModalContainer';
 
 let createHandlers = function(dispatch) {
-  let handleClick = function(data) {
-    dispatch(showModal(data))
+  let handleOpenModal = function(data) {
+    dispatch(showModal(data));
+  };
+
+  let handleCloseModal = function(data) {
+    dispatch(hideModal(data));
   };
 
   return {
-    handleClick
+    handleOpenModal,
+    handleCloseModal
   };
 }
 
 export default class CashmereApp extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -33,6 +39,7 @@ export default class CashmereApp extends Component {
             <ExpenseList handlers={ handlers } expenses={ expenses } />
           </div>
         </div>
+        <ModalContainer handlers={ handlers } />
       </div>
     );
   }

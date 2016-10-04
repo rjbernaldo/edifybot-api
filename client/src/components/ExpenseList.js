@@ -3,11 +3,11 @@ import ExpenseItem from './ExpenseItem';
 
 export default class ExpenseList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    const { handleClick } = this.props.handlers;
+    const { handleOpenModal } = this.props.handlers;
     let expenses = this.props.expenses;
 
     return (
@@ -23,7 +23,7 @@ export default class ExpenseList extends Component {
           </thead>
           <tbody>
             {expenses.map(expense =>
-              <ExpenseItem key={ expense.id } expense={ expense } handleClick={ handleClick } />
+              <ExpenseItem key={ expense.id } expense={ expense } handleOpenModal={ handleOpenModal } />
             )}
           </tbody>
           <tfoot>

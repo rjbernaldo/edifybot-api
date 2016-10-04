@@ -47,13 +47,13 @@ export const HIDE_MODAL = 'HIDE_MODAL';
 export function showModal(options) {
   return {
     type: SHOW_MODAL,
-    isOpen: true,
-    options: options
+    modalType: options.modalType,
+    modalProps: options.modalProps
   };
 }
 
 export function hideModal() {
   return {
-    type: HIDE_DATA
+    type: HIDE_MODAL
   };
 }
