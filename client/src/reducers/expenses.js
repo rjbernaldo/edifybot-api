@@ -1,4 +1,4 @@
-import { REQUEST_DATA, RECEIVE_DATA, INVALIDATE_DATA } from '../actions';
+import { REQUEST_DATA, RECEIVE_DATA, UPDATE_DATA, INVALIDATE_DATA } from '../actions';
 
 const initialState = {
   isFetching: false,
@@ -16,6 +16,12 @@ export default function expenses(state = initialState, action) {
         isFetching: false,
         data: action.data
       });
+    case UPDATE_DATA:
+      console.log(state)
+    // TODO:
+      // return Object.assign({}, state, {
+      //   data:
+      // });
     case INVALIDATE_DATA:
       return Object.assign({}, state, initialState);
     default:

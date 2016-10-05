@@ -41,9 +41,14 @@ class ExpensesController < ApplicationController
   def update
     user = User.find_by_sender_id(params[:sender_id])
     expense = user.expenses.where(id: params[:id]).take
-    byebug
-    expense.update_attributes(expense)
-    
+    updated_expense = params[:expense]
+    expense.update_attributes(
+      amount: updated_expense[:amount],
+      item: updated_expense[:item],
+      location: updated_expense[:location],
+      category: updated_expense[:category],
+    )
+
     render :json => expense
   end
 

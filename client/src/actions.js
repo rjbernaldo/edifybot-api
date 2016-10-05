@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 
 export const REQUEST_DATA = 'REQUEST_DATA';
 export const RECEIVE_DATA = 'RECEIVE_DATA';
+export const UPDATE_DATA = 'UPDATE_DATA';
 export const INVALIDATE_DATA = 'INVALIDATE_DATA';
 
 export function requestData() {
@@ -25,7 +26,7 @@ export function invalidateData() {
 
 export function fetchData() {
   const expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
-  
+
   return function(dispatch) {
     dispatch(requestData())
 
@@ -35,16 +36,30 @@ export function fetchData() {
   }
 }
 
+export function updateData(expense) {
+  return {
+    type: UPDATE_DATA,
+    expense: expense
+  }
+}
+
 export function updateExpense(expense) {
   const expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
-  
-  return function() {
-    console.log(expense);
+
+  return function(dispatch) {
     return fetch(`${expensesUrl}/${expense.id}`, {
       method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         expense: expense
       })
+    })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(updateData(json))
     });
   }
 }
