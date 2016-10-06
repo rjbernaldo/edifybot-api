@@ -9,12 +9,17 @@ const ModalEdit = ({ expense, dispatch }) => (
       <div className="modal-header">Modal Edit</div>
       <div className="modal-body">
         <ul>
-          <li>{ expense.item }</li>
-          <li>{ expense.location }</li>
-          <li>{ expense.category }</li>
-          <li>{ expense.amount }</li>
+          <input className="form-expense-item" type="text" defaultValue={ expense.item }></input>
+          <input className="form-expense-location" type="text" defaultValue={ expense.location }></input>
+          <input className="form-expense-category" type="text" defaultValue={ expense.category }></input>
+          <input className="form-expense-amount" type="text" defaultValue={ expense.amount }></input>
         </ul>
         <button className="button primary" onClick={() => {
+          expense.item = document.querySelector('.form-expense-item').value;
+          expense.location = document.querySelector('.form-expense-location').value;
+          expense.category = document.querySelector('.form-expense-category').value;
+          expense.amount = document.querySelector('.form-expense-amount').value;
+
           dispatch(updateExpense(expense)).then(() => {
             dispatch(hideModal());
           });

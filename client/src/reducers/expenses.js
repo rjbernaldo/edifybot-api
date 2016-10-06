@@ -17,11 +17,17 @@ export default function expenses(state = initialState, action) {
         data: action.data
       });
     case UPDATE_DATA:
-      console.log(state)
-    // TODO:
-      // return Object.assign({}, state, {
-      //   data:
-      // });
+      var data = state.data;
+
+      return Object.assign({}, state, {
+        data: data.map(expense => {
+          if (expense.id == action.id) {
+            return expense.update(action.expense);
+          } else {
+            return expense;
+          }
+        })
+      });
     case INVALIDATE_DATA:
       return Object.assign({}, state, initialState);
     default:
