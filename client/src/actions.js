@@ -4,11 +4,8 @@ export const REQUEST_DATA = 'REQUEST_DATA';
 export const RECEIVE_DATA = 'RECEIVE_DATA';
 export const UPDATE_DATA = 'UPDATE_DATA';
 export const INVALIDATE_DATA = 'INVALIDATE_DATA';
-var apiUrl = 'http://localhost:3000';
-
-if (ENV['RACN_ENV'] === 'production') {
-  apiUrl = 'https://cashmerebot.herokuapp.com';
-}
+// const apiUrl = 'http://localhost:3000';
+const apiUrl = 'https://cashmerebot.herokuapp.com';
 
 export function requestData() {
   return {
