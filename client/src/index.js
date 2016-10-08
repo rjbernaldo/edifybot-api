@@ -9,7 +9,7 @@ import createLogger from 'redux-logger';
 import { compose, createStore, applyMiddleware } from 'redux';
 import { fetchData } from './actions';
 import { Provider } from 'react-redux';
-import { AppContainer } from 'react-hot-loader';
+// import { AppContainer } from 'react-hot-loader';
 import { CashmereAppContainer } from './containers/CashmereAppContainer';
 import rootReducer from './reducers';
 

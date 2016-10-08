@@ -22,7 +22,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.serve_static_files = true#ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -94,15 +94,15 @@ Rails.application.configure do
       text: "I'm sorry, what was that? 😕"
     }
   }
-  
+
   NEW_EXPENSE_ADDED_RESPONSE = [
-    "New expense added. 👍"  
+    "New expense added. 👍"
   ]
-  
+
   EXPENSE_NOT_SAVED_RESPONSE = [
     "Expense not saved. 👌"
   ]
-  
+
   HELP_RESPONSE = [
     'What can I help you with? ℹ️'
   ]

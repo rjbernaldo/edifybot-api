@@ -1,4 +1,5 @@
 import { REQUEST_DATA, RECEIVE_DATA, UPDATE_DATA, INVALIDATE_DATA } from '../actions';
+import expense from './expense';
 
 const initialState = {
   isFetching: false,
@@ -14,19 +15,11 @@ export default function expenses(state = initialState, action) {
     case RECEIVE_DATA:
       return Object.assign({}, state, {
         isFetching: false,
-        data: action.data
+        data: action.data 
       });
     case UPDATE_DATA:
-      var data = state.data;
-
       return Object.assign({}, state, {
-        data: data.map(expense => {
-          if (expense.id == action.id) {
-            return expense.update(action.expense);
-          } else {
-            return expense;
-          }
-        })
+        data: state.data.map(e => expense(e, action))
       });
     case INVALIDATE_DATA:
       return Object.assign({}, state, initialState);
