@@ -23,7 +23,7 @@ class ExpensesController < ApplicationController
   def index
     user = User.find_by_sender_id(params[:sender_id])
 
-    render :json => user.expenses
+    render :json => user.expenses.order(created_at: :desc)
   end
 
   def show
