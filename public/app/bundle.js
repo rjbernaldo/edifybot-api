@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ead556120b042dca4752"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "03523bbc71fa8a425409"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -28676,6 +28676,8 @@
 	var RECEIVE_DATA = exports.RECEIVE_DATA = 'RECEIVE_DATA';
 	var UPDATE_DATA = exports.UPDATE_DATA = 'UPDATE_DATA';
 	var INVALIDATE_DATA = exports.INVALIDATE_DATA = 'INVALIDATE_DATA';
+	// const apiUrl = 'http://localhost:3000';
+	var apiUrl = 'https://cashmerebot.herokuapp.com';
 
 	function requestData() {
 	  return {
@@ -28697,12 +28699,13 @@
 	}
 
 	function fetchData() {
-	  var expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
+	  console.log('API URL');
+	  var url = apiUrl + '/users/950498005077644/expenses';
 
 	  return function (dispatch) {
 	    dispatch(requestData());
 
-	    return (0, _isomorphicFetch2.default)(expensesUrl).then(function (response) {
+	    return (0, _isomorphicFetch2.default)(url).then(function (response) {
 	      return response.json();
 	    }).then(function (json) {
 	      return dispatch(receiveData(json));
@@ -28718,10 +28721,11 @@
 	}
 
 	function updateExpense(expense) {
-	  var expensesUrl = 'http://localhost:3000/users/950498005077644/expenses';
+	  console.log('API URL');
+	  var url = apiUrl + '/users/950498005077644/expenses/' + expense.id;
 
 	  return function (dispatch) {
-	    return (0, _isomorphicFetch2.default)(expensesUrl + '/' + expense.id, {
+	    return (0, _isomorphicFetch2.default)(url, {
 	      method: 'PATCH',
 	      headers: {
 	        'Accept': 'application/json',
@@ -28768,6 +28772,8 @@
 	  __REACT_HOT_LOADER__.register(UPDATE_DATA, 'UPDATE_DATA', '/home/rj/Dropbox/Source/personal/cashmerebot/client/src/actions.js');
 
 	  __REACT_HOT_LOADER__.register(INVALIDATE_DATA, 'INVALIDATE_DATA', '/home/rj/Dropbox/Source/personal/cashmerebot/client/src/actions.js');
+
+	  __REACT_HOT_LOADER__.register(apiUrl, 'apiUrl', '/home/rj/Dropbox/Source/personal/cashmerebot/client/src/actions.js');
 
 	  __REACT_HOT_LOADER__.register(requestData, 'requestData', '/home/rj/Dropbox/Source/personal/cashmerebot/client/src/actions.js');
 
