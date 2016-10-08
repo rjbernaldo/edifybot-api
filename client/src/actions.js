@@ -27,6 +27,7 @@ export function invalidateData() {
 }
 
 export function fetchData() {
+  console.log('API URL': apiUrl);
   const url = `${apiUrl}/users/950498005077644/expenses`;
 
   return function(dispatch) {
@@ -46,6 +47,7 @@ export function updateData(expense) {
 }
 
 export function updateExpense(expense) {
+  console.log('API URL': apiUrl);
   const url = `${apiUrl}/users/950498005077644/expenses/${expense.id}`;
 
   return function(dispatch) {
