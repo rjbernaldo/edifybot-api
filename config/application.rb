@@ -30,11 +30,11 @@ module Expensetracker
       'Access-Control-Request-Method' => 'GET, PATCH, PUT, POST, OPTIONS, DELETE',
       'Access-Control-Allow-Headers:' => 'Origin, X-Requested-With, Content-Type, Accept'
     }
-    
+
     config.middleware.insert_before 0, "Rack::Cors", :debug => true, :logger => (-> { Rails.logger }) do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :patch, :options]
+        resource '*', :headers => :any, :methods => [:get, :patch, :delete, :options]
       end
     end
   end

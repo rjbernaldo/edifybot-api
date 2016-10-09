@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { hideModal, updateExpense } from '../actions';
+import { hideModal, updateExpense, deleteExpense } from '../actions';
 import { connect } from 'react-redux';
 
 const ModalEdit = ({ expense, dispatch }) => (
@@ -24,7 +24,11 @@ const ModalEdit = ({ expense, dispatch }) => (
             dispatch(hideModal());
           });
         }}>Save</button>
-        <button className="button" onClick={() => { dispatch(hideModal()) }}>Cancel</button>
+        <button className="button outline" onClick={() => {
+          dispatch(deleteExpense(expense)).then(() => {
+            dispatch(hideModal());
+          });
+        }}>Delete</button>
       </div>
     </div>
   </div>

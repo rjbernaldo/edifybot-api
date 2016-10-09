@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ExpenseItem from './ExpenseItem';
+import ExpenseTotal from './ExpenseTotal';
 
 export default class ExpenseList extends Component {
   constructor(props) {
@@ -27,12 +28,9 @@ export default class ExpenseList extends Component {
             )}
           </tbody>
           <tfoot>
-            <tr>
-              <td>Total</td>
-              <td></td>
-              <td></td>
-              <td>500</td>
-            </tr>
+            <ExpenseTotal amount={ expenses.reduce((a,b) => {
+              return a + parseInt(b.amount);
+            }, 0)}></ExpenseTotal>
           </tfoot>
         </table>
       </section>
