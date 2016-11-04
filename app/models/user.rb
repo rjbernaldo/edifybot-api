@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
               buttons: [
                 {
                   type: 'web_url',
-                  url: 'https://google.com',
+                  url: "https://expensetracker.rjbernaldo.com/#{self.sender_id}",
                   title: 'View full report',
                   webview_height_ratio: 'tall'
                 }
