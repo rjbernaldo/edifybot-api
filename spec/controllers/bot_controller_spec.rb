@@ -70,7 +70,7 @@ RSpec.describe BotController do
               "messaging"=>[
                 {
                   "sender"=>{
-                    "id"=>"950498005077644"
+                    "id"=>"950498005077645"
                   },
                   "recipient"=>{
                     "id"=>"1802378443326126"
@@ -94,7 +94,7 @@ RSpec.describe BotController do
         stub_request(:post, "#{FACEBOOK_GRAPH_URL}/v2.6/me/messages?access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
           .to_return(body: 'OK')
 
-        stub_request(:get, "#{FACEBOOK_GRAPH_URL}/v2.6/950498005077644?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
+        stub_request(:get, "#{FACEBOOK_GRAPH_URL}/v2.6/950498005077645?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
           .to_return(body: {
             first_name: 'test_firstname',
             last_name: 'test_lastname',
@@ -109,10 +109,10 @@ RSpec.describe BotController do
         post :receive_data, body
 
         expect(response.status).to eq(200)
-
+        
         last_user = User.last
 
-        expect(last_user.sender_id).to eq('950498005077644')
+        expect(last_user.sender_id).to eq('950498005077645')
         expect(last_user.first_name).to eq('test_firstname')
         expect(last_user.last_name).to eq('test_lastname')
         expect(last_user.profile_pic).to eq('profilepic.com')

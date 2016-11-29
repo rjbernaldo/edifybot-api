@@ -3,16 +3,16 @@ default: &default
   pool: 5
   timeout: 5000
   username: postgres
-  host: expensetracker_db
+  host: edifybot_db
 
 development:
   <<: *default
-  database: expensetracker_development
+  database: edifybot_development
 
 test:
   <<: *default
-  database: expensetracker_test
+  database: edifybot_test
 
 production:
   <<: *default
-  database: expensetracker 
+  database: edifybot 

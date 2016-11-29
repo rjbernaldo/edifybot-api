@@ -68,4 +68,8 @@ Rails.application.configure do
   HELP_RESPONSE = [
     'What can I help you with? ℹ️'
   ]
+  
+  HELP_NEW_EXPENSE_RESPONSE = "To record a new expense, send a message with the following format:\n\n<AMOUNT> <ITEM> #<CATEGORY>\n\neg: '99 chickenjoy #food'"
+  RECORD_EXPENSE_TUTORIAL = "Record an expense by sending something like '99 chickenjoy #food', view your expenses by typing 'report', or ask for 'help'."
+  HELP_SHOW_REPORT_RESPONSE = "To view your expenses, send 'report'"
 end

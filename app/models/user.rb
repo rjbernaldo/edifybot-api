@@ -13,8 +13,18 @@ class User < ActiveRecord::Base
         buttons: [
           {
             type: 'postback',
+            title: 'Dollar ($)',
+            payload: 'NEW_USER_DOLLAR'
+          },
+          {
+            type: 'postback',
             title: 'Peso (₱)',
             payload: 'NEW_USER_PESO'
+          },
+          {
+            type: 'postback',
+            title: 'Euro (€)',
+            payload: 'NEW_USER_EURO'
           }
         ]
       }
@@ -77,7 +87,7 @@ class User < ActiveRecord::Base
         category = formatted_message[:category]
 
         message_text = [
-          "💵 #{self.currency_symbol}#{amount}",
+          "💵 #{self.currency_symbol}#{'%.2f' % amount}",
           "📦 #{item}"
         ]
 
@@ -111,26 +121,29 @@ class User < ActiveRecord::Base
 
         return self.last_response
       when 'REPORT'
-        daily = generate_daily_report
-        weekly = generate_weekly_report
-        monthly = generate_monthly_report
+        daily = '%.2f' % generate_daily_report
+        weekly = '%.2f' % generate_weekly_report
+        monthly = '%.2f' % generate_monthly_report
 
         return {
-          type: 'generic',
-          elements: [
-            {
-              title: 'Expense Report',
-              subtitle: "Daily: #{self.currency_symbol}#{daily}\nWeekly: #{self.currency_symbol}#{weekly}\nMonthly: #{self.currency_symbol}#{monthly}",
-              buttons: [
-                {
-                  type: 'web_url',
-                  url: "https://expensetracker.rjbernaldo.com/#{self.sender_id}",
-                  title: 'View full report',
-                  webview_height_ratio: 'tall'
-                }
-              ]
-            }
-          ]
+          type: 'button',
+          data: {
+            text: "You've spent a total of #{self.currency_symbol}#{daily} today, #{self.currency_symbol}#{weekly} this week, and #{self.currency_symbol}#{monthly} this month.",
+            buttons: [
+              {
+                type: 'web_url',
+                url: "https://dashboard.edifybot.com/#{self.sender_id}",
+                title: 'View full report',
+                webview_height_ratio: 'tall'
+              },
+              {
+                type: 'web_url',
+                url: "https://analytics.edifybot.com/#{self.sender_id}",
+                title: 'View expense analytics',
+                webview_height_ratio: 'tall'
+              }
+            ]
+          }
         }
       when 'HELP'
         return {
@@ -193,26 +206,65 @@ class User < ActiveRecord::Base
         return {
           type: 'message',
           data: {
-            text: "To record a new expense, send a message with the following format:\n\n<AMOUNT> <ITEM> @<LOCATION> #<CATEGORY>\n\neg: '99 Chickenjoy @Jollibee #Food'"
+            text: HELP_NEW_EXPENSE_RESPONSE
           }
         }
       when 'HELP_SHOW_REPORT'
         return {
           type: 'message',
           data: {
-            text: "To view your expenses, send 'report'"
+            text: HELP_SHOW_REPORT_RESPONSE
           }
         }
-      when 'NEW_USER_PESO'
+      when 'NEW_USER_DOLLAR'
+        self.currency = 'Dollar'
+        self.currency_symbol = '$'
         self.last_response = nil
-        self.currency = 'Peso'
-        self.currency_symbol = '₱'
         self.save
 
         return {
           type: 'message',
           data: {
-            text: "I've set your currency to #{self.currency} (#{self.currency_symbol}), let's begin!\n\nTry recording an expense by sending something like '99 Chickenjoy @Jollibee #Food', view your expenses by typing 'report', or ask for 'help'."
+            text: "I've set your currency to #{self.currency} (#{self.currency_symbol}), let's begin!\n\n#{RECORD_EXPENSE_TUTORIAL}"
+          }
+        }
+        
+      when 'NEW_USER_PESO'
+        self.currency = self.currency || 'Peso'
+        self.currency_symbol = self.currency_symbol || '₱'
+        self.last_response = nil
+        self.save
+
+        return {
+          type: 'message',
+          data: {
+            text: "I've set your currency to #{self.currency} (#{self.currency_symbol}), let's begin!\n\n#{RECORD_EXPENSE_TUTORIAL}"
+          }
+        }
+
+      when 'NEW_USER_EURO'
+        self.currency = self.currency || 'Euro'
+        self.currency_symbol = self.currency_symbol || '€'
+        self.last_response = nil
+        self.save
+
+        return {
+          type: 'message',
+          data: {
+            text: "I've set your currency to #{self.currency} (#{self.currency_symbol}), let's begin!\n\n#{RECORD_EXPENSE_TUTORIAL}"
+          }
+        }
+        
+      when 'NEW_USER_POUND'
+        self.currency = self.currency || 'Pound'
+        self.currency_symbol = self.currency_symbol || '£'
+        self.last_response = nil
+        self.save
+
+        return {
+          type: 'message',
+          data: {
+            text: "I've set your currency to #{self.currency} (#{self.currency_symbol}), let's begin!\n\n#{RECORD_EXPENSE_TUTORIAL}"
           }
         }
       else
@@ -223,14 +275,14 @@ class User < ActiveRecord::Base
   private
 
   def generate_daily_report
-    self.expenses.where("created_at >= ?", Chronic.parse('today at 00:00')).inject(0) { |total, e| total + e.amount.to_i }
+    self.expenses.where("created_at >= ?", Chronic.parse('today at 00:00')).inject(0) { |total, e| total + e.amount.to_f }
   end
 
   def generate_weekly_report
-    self.expenses.where("created_at >= ?", Chronic.parse('this week at 00:00')).inject(0) { |total, e| total + e.amount.to_i }
+    self.expenses.where("created_at >= ?", Chronic.parse('this week at 00:00')).inject(0) { |total, e| total + e.amount.to_f }
   end
 
   def generate_monthly_report
-    self.expenses.where("created_at >= ?", Chronic.parse('this month at 00:00')).inject(0) { |total, e| total + e.amount.to_i }
+    self.expenses.where("created_at >= ?", Chronic.parse('this month at 00:00')).inject(0) { |total, e| total + e.amount.to_f }
   end
 end

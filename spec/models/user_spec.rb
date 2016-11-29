@@ -17,8 +17,6 @@ RSpec.describe User do
     it 'should respond with intro' do
       message_response = user.process_new_user
       expect(message_response[:data][:text]).to eq("Hi #{user[:first_name]}. Please select your currency so we can get started.")
-      expect(message_response[:data][:buttons][0][:title]).to eq('Peso (₱)')
-      expect(message_response[:data][:buttons][0][:payload]).to eq('NEW_USER_PESO')
     end
   end
 
@@ -179,7 +177,7 @@ RSpec.describe User do
       it 'should respond with buttons' do
         message_response = user.process_message_action('NEW_EXPENSE', { 'text' => '20 ramen @mensho #food' })
 
-        expect(message_response[:data][:text]).to eq("💵 #{user.currency_symbol}20\n📦 ramen\n📍 mensho\n📂 food\n\nIs this correct? 🤔")
+        expect(message_response[:data][:text]).to eq("💵 #{user.currency_symbol}20.00\n📦 ramen\n📍 mensho\n📂 food\n\nIs this correct? 🤔")
         expect(message_response[:data][:buttons][0][:payload]).to eq('NEW_EXPENSE_YES')
         expect(message_response[:data][:buttons][1][:payload]).to eq('NEW_EXPENSE_NO')
       end
@@ -192,10 +190,10 @@ RSpec.describe User do
         user.expenses << expense
         message_response = user.process_message_action('REPORT')
 
-        expect(message_response[:elements][0][:subtitle]).to eq("Daily: #{user.currency_symbol}20\nWeekly: #{user.currency_symbol}20\nMonthly: #{user.currency_symbol}20")
-        expect(message_response[:elements][0][:buttons][0][:type]).to eq('web_url')
-        expect(message_response[:elements][0][:buttons][0][:title]).to eq('View full report')
-        expect(message_response[:elements][0][:buttons][0][:webview_height_ratio]).to eq('tall')
+        expect(message_response[:data][:text]).to eq("You've spent a total of #{user.currency_symbol}20.00 today, #{user.currency_symbol}20.00 this week, and #{user.currency_symbol}20.00 this month.")
+        expect(message_response[:data][:buttons][0][:type]).to eq('web_url')
+        expect(message_response[:data][:buttons][0][:title]).to eq('View full report')
+        expect(message_response[:data][:buttons][0][:webview_height_ratio]).to eq('tall')
       end
     end
 
@@ -243,7 +241,7 @@ RSpec.describe User do
         postback['payload'] = 'HELP_NEW_EXPENSE'
 
         postback_response = user.process_postback_action(postback)
-        expect(postback_response[:data][:text]).to eq("To record a new expense, send a message with the following format:\n\n<AMOUNT> <ITEM> @<LOCATION> #<CATEGORY>\n\neg: '99 Chickenjoy @Jollibee #Food'")
+        expect(postback_response[:data][:text]).to eq(HELP_NEW_EXPENSE_RESPONSE)
       end
     end
 
@@ -253,7 +251,7 @@ RSpec.describe User do
         postback['payload'] = 'HELP_SHOW_REPORT'
 
         postback_response = user.process_postback_action(postback)
-        expect(postback_response[:data][:text]).to eq("To view your expenses, send 'report'")
+        expect(postback_response[:data][:text]).to eq(HELP_SHOW_REPORT_RESPONSE)
       end
     end
 
@@ -266,7 +264,7 @@ RSpec.describe User do
           postback_response = user.process_postback_action(postback)
           expect(user.currency).to eq('Peso')
           expect(user.currency_symbol).to eq('₱')
-          expect(postback_response[:data][:text]).to eq("I've set your currency to #{user.currency} (#{user.currency_symbol}), let's begin!\n\nTry recording an expense by sending something like '99 Chickenjoy @Jollibee #Food', view your expenses by typing 'report', or ask for 'help'.")
+          expect(postback_response[:data][:text]).to eq("I've set your currency to #{user.currency} (#{user.currency_symbol}), let's begin!\n\n#{RECORD_EXPENSE_TUTORIAL}")
         end
       end
     end
