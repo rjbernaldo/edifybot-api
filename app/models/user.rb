@@ -135,12 +135,6 @@ class User < ActiveRecord::Base
                 url: "https://dashboard.edifybot.com/#{self.sender_id}",
                 title: 'View full report',
                 webview_height_ratio: 'tall'
-              },
-              {
-                type: 'web_url',
-                url: "https://analytics.edifybot.com/#{self.sender_id}",
-                title: 'View expense analytics',
-                webview_height_ratio: 'tall'
               }
             ]
           }
