@@ -3,7 +3,7 @@ default: &default
   pool: 5
   timeout: 5000
   username: postgres
-  host: edifybot-db
+  url: <%= ENV['DATABASE_URL'] %>
 
 development:
   <<: *default
@@ -16,4 +16,3 @@ test:
 production:
   <<: *default
   database: edifybot 
-  url: <%= ENV['DATABASE_URL'] %>
