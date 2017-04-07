@@ -16,3 +16,4 @@ test:
 production:
   <<: *default
   database: edifybot 
+  url: <%= ENV['DATABASE_URL'] %>
