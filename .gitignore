@@ -21,3 +21,5 @@
 client/node_modules/*
 public/bundle.js
 *.log
+Dockerfile
+docker-compose.yml
