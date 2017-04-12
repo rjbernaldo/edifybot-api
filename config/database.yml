@@ -1,17 +1,14 @@
-default: &default
+development: &default
   adapter: postgresql
-  pool: 5
-  timeout: 5000
-  username: postgres
-
-development:
-  <<: *default
-  host: edifybot-db
+  encoding: unicode
   database: edifybot_development
+  pool: 5
+  username: postgres
+  password:
+  host: edifybot-db
 
 test:
   <<: *default
-  host: edifybot-db
   database: edifybot_test
 
 production:
