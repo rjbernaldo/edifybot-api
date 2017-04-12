@@ -24,6 +24,8 @@ module EdifyBot
     config.active_record.raise_in_transactional_callbacks = true
 
     config.autoload_paths << Rails.root.join('lib')
+    
+    config.assets.enabled = false
 
     config.action_dispatch.default_headers = {
       'Access-Control-Allow-Origin' => '*',
