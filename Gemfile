@@ -17,6 +17,7 @@ group :development, :test do
   gem 'sqlite3', '1.3.11'
   gem 'byebug'
   gem 'webmock'
+  gem 'dotenv-rails'
 end
 
 group :development do
