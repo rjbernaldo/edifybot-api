@@ -127,6 +127,15 @@ RSpec.describe User do
     end
 
     describe 'UNRECOGNIZED' do
+      context 'when there is no message at all' do
+        it 'should respond with "UNRECOGNIZED"' do
+          message = {}
+
+          message_action = user.determine_action(message)
+          expect(message_action).to eq('UNRECOGNIZED')
+        end
+      end
+      
       context 'when message is unrecognized' do
         it 'should respond with "UNRECOGNIZED"' do
           message = message_wrapper.dup

@@ -36,32 +36,9 @@ RSpec.describe BotController do
   end
 
   describe 'POST#receive_data' do
-    let(:body) {
-      {
-        "object"=>"page",
-        "entry"=>[
-          {
-            "id"=>"1802378443326126",
-            "time"=>1474075416133,
-            "messaging"=>[
-              {
-                "sender"=>{
-                  "id"=>"950498005077644"
-                },
-                "recipient"=>{
-                  "id"=>"1802378443326126"
-                },
-                "timestamp"=>1474075304229,
-                "message"=>{
-                  "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
-                  "seq"=>2296,
-                  "text"=>"test"
-                }
-              }
-            ]
-          }
-        ],
-        "bot"=>{
+    context 'when user sends a message' do
+      let(:body) {
+        {
           "object"=>"page",
           "entry"=>[
             {
@@ -70,7 +47,7 @@ RSpec.describe BotController do
               "messaging"=>[
                 {
                   "sender"=>{
-                    "id"=>"950498005077645"
+                    "id"=>"950498005077644"
                   },
                   "recipient"=>{
                     "id"=>"1802378443326126"
@@ -84,12 +61,35 @@ RSpec.describe BotController do
                 }
               ]
             }
-          ]
+          ],
+          "bot"=>{
+            "object"=>"page",
+            "entry"=>[
+              {
+                "id"=>"1802378443326126",
+                "time"=>1474075416133,
+                "messaging"=>[
+                  {
+                    "sender"=>{
+                      "id"=>"950498005077645"
+                    },
+                    "recipient"=>{
+                      "id"=>"1802378443326126"
+                    },
+                    "timestamp"=>1474075304229,
+                    "message"=>{
+                      "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
+                      "seq"=>2296,
+                      "text"=>"test"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
         }
       }
-    }
-
-    context 'when user sends a message' do
+      
       before do
         stub_request(:post, "#{FACEBOOK_GRAPH_URL}/v2.6/me/messages?access_token=#{FACEBOOK_PAGE_ACCESS_TOKEN}")
           .to_return(body: 'OK')
@@ -119,6 +119,19 @@ RSpec.describe BotController do
         expect(last_user.locale).to eq('100')
         expect(last_user.timezone).to eq('100')
         expect(last_user.gender).to eq('male')
+      end
+    end
+    
+    context 'when user sends a non message payload' do
+      let (:body) {
+        {"entry"=>[{"changes"=>[{"field"=>"affiliation"}], "id"=>"1365124943", "time"=>1492741043}], "object"=>"page", "bot"=>{"entry"=>[{"changes"=>[{"field"=>"affiliation"}], "id
+"=>"1365124943", "time"=>1492741043}], "object"=>"page"}}
+      }
+        
+      it 'should not error out' do
+        post :receive_data, body
+
+        expect(response.status).to eq(200)
       end
     end
   end

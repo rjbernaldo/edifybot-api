@@ -13,6 +13,9 @@ class BotController < ApplicationController
     entries = decode_data(params)
     entries.each do |entry|
       messages = entry['messaging']
+      
+      return if messages.nil?
+        
       messages.each do |message|
         sender_id = message['sender']['id']
         message_body = message['message']

@@ -47,16 +47,17 @@ class User < ActiveRecord::Base
 
   def determine_action(message)
     message_text = message['text']
+    message_text = message_text.downcase if message_text
 
     if self.state == 'NEW_EXPENSE_CONFIRM'
       return 'WAITING_FOR_CONFIRMATION'
-    elsif message_text.split(' ')[0] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ && format_expense(message)
+    elsif message_text && message_text.split(' ')[0] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ && format_expense(message)
       return 'NEW_EXPENSE'
-    elsif GREETING_MESSAGES.include?(message_text.downcase)
+    elsif GREETING_MESSAGES.include?(message_text)
       return 'GREETING'
-    elsif HELP_MESSAGES.include?(message_text.downcase)
+    elsif HELP_MESSAGES.include?(message_text)
       return 'HELP'
-    elsif REPORT_MESSAGES.include?(message_text.downcase)
+    elsif REPORT_MESSAGES.include?(message_text)
       return 'REPORT'
     else
       return 'UNRECOGNIZED'
