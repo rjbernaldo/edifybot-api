@@ -39,54 +39,10 @@ RSpec.describe BotController do
     context 'when user sends a message' do
       let(:body) {
         {
-          "object"=>"page",
-          "entry"=>[
-            {
-              "id"=>"1802378443326126",
-              "time"=>1474075416133,
-              "messaging"=>[
-                {
-                  "sender"=>{
-                    "id"=>"950498005077644"
-                  },
-                  "recipient"=>{
-                    "id"=>"1802378443326126"
-                  },
-                  "timestamp"=>1474075304229,
-                  "message"=>{
-                    "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
-                    "seq"=>2296,
-                    "text"=>"test"
-                  }
-                }
-              ]
-            }
-          ],
-          "bot"=>{
-            "object"=>"page",
-            "entry"=>[
-              {
-                "id"=>"1802378443326126",
-                "time"=>1474075416133,
-                "messaging"=>[
-                  {
-                    "sender"=>{
-                      "id"=>"950498005077645"
-                    },
-                    "recipient"=>{
-                      "id"=>"1802378443326126"
-                    },
-                    "timestamp"=>1474075304229,
-                    "message"=>{
-                      "mid"=>"mid.1474075304191:1c03bf362eb135fc73",
-                      "seq"=>2296,
-                      "text"=>"test"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
+          "object"=>"page", "entry"=>[ { "id"=>"1802378443326126", "time"=>1474075416133, "messaging"=>[{"sender"=>{"id"=>"950498005077644"},
+          "recipient"=>{"id"=>"1802378443326126"},"timestamp"=>1474075304229,"message"=>{"mid"=>"mid.1474075304191:1c03bf362eb135fc73","seq"=>2296,"text"=>"test"}}]}],
+          "bot"=>{"object"=>"page","entry"=>[{"id"=>"1802378443326126","time"=>1474075416133,"messaging"=>[{"sender"=>{"id"=>"950498005077645"},"recipient"=>{
+          "id"=>"1802378443326126"},"timestamp"=>1474075304229,"message"=>{"mid"=>"mid.1474075304191:1c03bf362eb135fc73","seq"=>2296,"text"=>"test"}}]}]}
         }
       }
       
@@ -124,8 +80,10 @@ RSpec.describe BotController do
     
     context 'when user sends a non message payload' do
       let (:body) {
-        {"entry"=>[{"changes"=>[{"field"=>"affiliation"}], "id"=>"1365124943", "time"=>1492741043}], "object"=>"page", "bot"=>{"entry"=>[{"changes"=>[{"field"=>"affiliation"}], "id
-"=>"1365124943", "time"=>1492741043}], "object"=>"page"}}
+        {
+          "entry"=>[{"changes"=>[{"field"=>"affiliation"}], "id"=>"1365124943", "time"=>1492741043}], "object"=>"page", "bot"=>{"entry"=>[{
+          "changes"=>[{"field"=>"affiliation"}], "id"=>"1365124943", "time"=>1492741043}], "object"=>"page"}
+        }
       }
         
       it 'should not error out' do
