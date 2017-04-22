@@ -275,7 +275,6 @@ class User < ActiveRecord::Base
     self.update(
       access_key: access_key,
       access_count: 0,
-      # TODO: Time
     )
     self.reload
     
@@ -286,7 +285,7 @@ class User < ActiveRecord::Base
     self.update(access_count: self.access_count + 1)
     self.reload
     self.access_count == 1
-    # TODO: Time
+    # TODO: Expiring keys
   end
   
   private
