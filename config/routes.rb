@@ -4,14 +4,14 @@ Rails.application.routes.draw do
   post 'bot/webhook' => 'bot#receive_data'
 
   # report
-  get 'users/:sender_id' => 'users#show'
+  get 'users/:access_key' => 'users#show'
   
   # expense list
-  get 'users/:sender_id/search' => 'expenses#search'
-  get 'users/:sender_id/expenses' => 'expenses#index'
+  # get 'users/:access_key/search' => 'expenses#search'
+  get 'users/:access_key/expenses' => 'expenses#index'
   
   # expense
-  get 'users/:sender_id/expenses/:id' => 'expenses#show'
-  patch 'users/:sender_id/expenses/:id' => 'expenses#update'
-  delete 'users/:sender_id/expenses/:id' => 'expenses#destroy'
+  get 'users/:access_key/expenses/:id' => 'expenses#show'
+  patch 'users/:access_key/expenses/:id' => 'expenses#update'
+  delete 'users/:access_key/expenses/:id' => 'expenses#destroy'
 end

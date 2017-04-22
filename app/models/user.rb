@@ -125,6 +125,7 @@ class User < ActiveRecord::Base
         daily = '%.2f' % generate_daily_report
         weekly = '%.2f' % generate_weekly_report
         monthly = '%.2f' % generate_monthly_report
+        access_key = generate_access_key
 
         return {
           type: 'button',
@@ -133,7 +134,7 @@ class User < ActiveRecord::Base
             buttons: [
               {
                 type: 'web_url',
-                url: "https://dashboard.edifybot.com/#{self.sender_id}",
+                url: "https://dashboard.edifybot.com/#{access_key}",
                 title: 'View full report',
                 webview_height_ratio: 'tall'
               }
@@ -267,6 +268,27 @@ class User < ActiveRecord::Base
     end
   end
 
+  
+  def generate_access_key
+    access_key = SecureRandom.uuid
+    
+    self.update(
+      access_key: access_key,
+      access_count: 0,
+      # TODO: Time
+    )
+    self.reload
+    
+    access_key
+  end
+  
+  def access_key_valid?
+    self.update(access_count: self.access_count + 1)
+    self.reload
+    self.access_count == 1
+    # TODO: Time
+  end
+  
   private
 
   def generate_daily_report

@@ -278,4 +278,23 @@ RSpec.describe User do
       end
     end
   end
+  
+  describe '#generate_access_key' do
+    it 'should generate a new access key' do
+      expect(user.generate_access_key).to be_truthy
+    end
+  end
+  
+  describe '#access_key_valid?' do
+    it 'should detect valid access keys' do
+      user.generate_access_key
+      expect(user.access_key_valid?).to be_truthy
+    end
+    
+    it 'should detect invalid access keys' do
+      user.generate_access_key
+      expect(user.access_key_valid?).to be_truthy
+      expect(user.access_key_valid?).to be_falsey
+    end
+  end
 end

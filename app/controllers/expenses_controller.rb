@@ -1,4 +1,6 @@
 class ExpensesController < ApplicationController
+  include ResponseHelper
+  
   def search
     user = User.find_by_sender_id(params[:sender_id])
     expenses = user.expenses
@@ -21,25 +23,25 @@ class ExpensesController < ApplicationController
   end
 
   def index
-    user = User.find_by_sender_id(params[:sender_id])
-
+    user = User.find_by_access_key(params[:access_key])
+    return invalid_access_key unless user
+    
     render :json => user.expenses.order(created_at: :desc)
   end
 
   def show
-    user = User.find_by_sender_id(params[:sender_id])
+    user = User.find_by_access_key(params[:access_key])
+    return invalid_access_key unless user
+    
     expense = user.expenses.where(id: params[:id]).take
 
     render :json => expense
   end
 
-  # def create
-  #   user = User.find_by_sender_id(params[:sender_id])
-  #   user.expenses.where(id: params[:id])
-  # end
-
   def update
-    user = User.find_by_sender_id(params[:sender_id])
+    user = User.find_by_access_key(params[:access_key])
+    return invalid_access_key unless user
+    
     expense = user.expenses.where(id: params[:id]).take
     updated_expense = params[:expense]
     expense.update_attributes(
@@ -53,7 +55,9 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
-    user = User.find_by_sender_id(params[:sender_id])
+    user = User.find_by_access_key(params[:access_key])
+    return invalid_access_key unless user
+    
     expense = user.expenses.where(id: params[:id]).take
     expense.destroy
 

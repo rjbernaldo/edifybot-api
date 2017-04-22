@@ -2,13 +2,24 @@ require 'rails_helper'
 
 RSpec.describe UsersController do
   describe '#show' do
-    context 'when sender_id is passed as a param' do
-      let (:user) { FactoryGirl.create(:user, sender_id: 123) }
-
+    let (:user) { FactoryGirl.create(:user) }
+    let (:access_key) { user.generate_access_key }
+    
+    context 'when access_key is valid' do
       it 'should return user in json response' do
-        get :show, :sender_id => user.sender_id
+        get :show, :access_key => access_key
 
-        expect(response.body).to eq(user.to_json)
+        expect(response.body).to include('access_key')
+      end
+    end
+    
+    context 'when access_key is no longer valid' do
+      it 'should return appropriate error message' do
+        get :show, :access_key => access_key
+        expect(response.body).to include('access_key')
+        
+        get :show, :access_key => access_key
+        expect(response.body).to include('error')
       end
     end
   end
